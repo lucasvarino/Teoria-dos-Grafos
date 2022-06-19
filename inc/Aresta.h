@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class aresta
+class Aresta
 {
 private:
 

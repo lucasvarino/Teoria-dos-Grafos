@@ -3,7 +3,7 @@
 
 using namespace std;
 
-class no
+class No
 {
 private:
   int id;
@@ -14,9 +14,9 @@ private:
 
 public:
  //construtor
-  no(int id);
+  No(int id);
  //destrutor
-  ~no();
+  ~No();
   //getters 
   int getId();
   int getGrauEntrada();

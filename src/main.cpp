@@ -1,3 +1,5 @@
+#include "../inc/No.h"
+
 #include <iostream>
 
 void menu(){
@@ -5,10 +7,6 @@ void menu(){
 }
 
 int main (int argc, char ** argv){
-    
-    if(arqv == null){
-
-    }
 
     return 0;
 }

@@ -1,36 +1,37 @@
 #include <iostream> //entrada pelo teclado e saida pela prompt
 #include <fstream>
 #include <vector>
+#include "../inc/No.h"
 
 using namespace std;
 
-no::no(int id){
+No::No(int id){
     this->id = id;
     this->grauEntrada = grauEntrada;
     this->grauSaida = grauSaida;
-    this->proxNo = proNo;
+    // this->proxNo = proNo;
     this->peso = peso;
 }
 
-no::~no(){
+No::~No(){
 
 }
 
 //getters
 
-int no::getId(){
+int No::getId(){
     return this->id;
 }
 
-float no::getPeso(){
+float No::getPeso(){
     return this->peso;
 }
 
-int no::getGrauEntrada(){
+int No::getGrauEntrada(){
     return this->grauEntrada;
 }
 
-int no::getGrauSaida(){
+int No::getGrauSaida(){
     return this->grauSaida;
 }
 
