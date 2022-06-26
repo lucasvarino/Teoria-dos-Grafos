@@ -43,6 +43,12 @@ int No::getTotalArestas()
     return this->totalArestas;
 }
 
+/**
+ * @brief Adiciona uma aresta no No
+ * 
+ * @param id 
+ * @param peso 
+ */
 void No::adicionarAresta(int id, double peso)
 {
     Aresta *aresta = new Aresta(id);
@@ -62,6 +68,12 @@ void No::adicionarAresta(int id, double peso)
     
 }
 
+/**
+ * @brief Procura No nó se existe uma aresta com o parametro id
+ * 
+ * @param id 
+ * @return NULL caso a aresta não seja encontrada ou Aresta*
+ */
 Aresta* No::procurarAresta(int id)
 {
     if (this->primeiraAresta == NULL)
@@ -82,6 +94,11 @@ Aresta* No::procurarAresta(int id)
     return NULL;
 }
 
+/**
+ * @brief Remove a aresta com o id recebido como parâmetro
+ * 
+ * @param id 
+ */
 void No::removerAresta(int id)
 {
     Aresta* arestaRemover = this->procurarAresta(id);
@@ -123,5 +140,31 @@ void No::removerAresta(int id)
 
     this->totalArestas--;
     delete arestaRemover;
+    
+}
+
+/**
+ * @brief Remove todas as arestas do No
+ * 
+ */
+void No::removerTodasArestas()
+{
+    if (this->primeiraAresta != NULL)
+    {
+        Aresta *aux = this->primeiraAresta;
+        Aresta *prox = this->primeiraAresta->getProx();
+
+        while (aux != NULL)
+        {
+            delete aux;
+            aux = prox;
+            prox = prox->getProx();
+        }
+
+    }
+
+    this->totalArestas = 0;
+    this->primeiraAresta = NULL;
+    this->ultimaAresta = NULL;
     
 }

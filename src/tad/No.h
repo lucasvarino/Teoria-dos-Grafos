@@ -24,6 +24,7 @@ class No
         void adicionarAresta(int id, double peso);
         Aresta* procurarAresta(int id);
         void removerAresta(int id);
+        void removerTodasArestas();
 };
 
 #endif // NO_H_INCLUDED
