@@ -36,11 +36,6 @@ int main(int argc, char const *argv[])
             getline(arquivo, linha);
             aux.append(linha);
             linha = aux + "\n";
-            nodeId++;
-            if(nodeId > 50){
-                cout << linha << endl;                
-                break;
-            }
         }
         cout << linha << endl;
     }
