@@ -52,6 +52,12 @@ No* Grafo::getUltimoNo()
     return this->ultimoNo;
 }
 
+/**
+ * @brief Insere um nó no Grafo
+ * 
+ * @param id 
+ * @param peso 
+ */
 void Grafo::inserirNo(int id, float peso)
 {
     No *no = new No();
@@ -74,6 +80,11 @@ void Grafo::inserirNo(int id, float peso)
     ordem++;
 }
 
+/**
+ * @brief Remove o nó com id recebido por parâmetro
+ * 
+ * @param id 
+ */
 void Grafo::removerNo(int id)
 {
     No *no = this->procurarNo(id);
@@ -107,12 +118,22 @@ void Grafo::removerNo(int id)
             }
 
             delete no;
+            this->ordem--;
             return;
         }
+
+        no = no->getProxNo();
+        aux = aux->getProxNo();
     }
     
 }
 
+/**
+ * @brief Procura pelo nó com o id recebido por parâmetro
+ * 
+ * @param id 
+ * @return No* ou nullptr caso não seja encontrado
+ */
 No* Grafo::procurarNo(int id)
 {
     No *aux = this->primeiroNo;
@@ -127,5 +148,43 @@ No* Grafo::procurarNo(int id)
 
     return nullptr;
     
+}
+
+/**
+ * @brief Adiciona uma aresta no Grafo
+ * 
+ * @param idOrigem 
+ * @param idDestino 
+ * @param peso 
+ */
+void Grafo::adicionarAresta(int idOrigem, int idDestino, float peso)
+{
+    //TODO: Verificar se está funcionando corretamente.
+
+    No *origem = this->procurarNo(idOrigem);
+    No *destino = this->procurarNo(idDestino);
+
+    if(origem == nullptr)
+    {
+        this->inserirNo(idOrigem, peso);
+    }
+
+    if(destino == nullptr)
+    {
+        this->inserirNo(idDestino, peso);
+    }
+
+    if(origem != nullptr && destino != nullptr)
+    {
+        if(!origem->procurarAresta(idDestino))
+        {
+            origem->adicionarAresta(idDestino, origem->getId(), peso);
+
+            if(!this->direcionado && destino->procurarAresta(idOrigem))
+            {
+                destino->adicionarAresta(idOrigem, origem->getId(), peso);
+            }
+        }
+    }
 }
 
