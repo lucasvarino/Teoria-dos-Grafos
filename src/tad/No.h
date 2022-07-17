@@ -11,17 +11,21 @@ class No
         Aresta* ultimaAresta;
         No* proxNo;
         int totalArestas;
+        float peso;
 
     public:
         No();
         ~No();
 
+        int getId();
         Aresta* getPrimeiraAresta();
         Aresta* getUltimaAresta();
-        No* getPoxNo();
+        No* getProxNo();
         int getTotalArestas();
+        void setPeso(float peso);
+        void setProx(No *prox);
 
-        void adicionarAresta(int id, double peso);
+        void adicionarAresta(int targetId, int originId, float peso);
         Aresta* procurarAresta(int id);
         void removerAresta(int id);
         void removerTodasArestas();

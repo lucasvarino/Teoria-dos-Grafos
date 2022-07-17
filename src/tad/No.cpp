@@ -5,8 +5,8 @@ using namespace std;
 
 No::No()
 {
-    this->primeiraAresta = NULL;
-    this->ultimaAresta = NULL;
+    this->primeiraAresta = nullptr;
+    this->ultimaAresta = nullptr;
     this->totalArestas = 0;
 }
 
@@ -14,13 +14,18 @@ No::~No()
 {
     Aresta *aresta = this->primeiraAresta;
 
-    while (aresta != NULL)
+    while (aresta != nullptr)
     {
         Aresta *aux = aresta->getProx();
         delete aresta;
         aresta = aux;
     }
     
+}
+
+int No::getId()
+{
+    return this->id;
 }
 
 Aresta* No::getPrimeiraAresta()
@@ -33,7 +38,7 @@ Aresta* No::getUltimaAresta()
     return this->ultimaAresta;
 }
 
-No* No::getPoxNo()
+No* No::getProxNo()
 {
     return this->proxNo;
 }
@@ -43,18 +48,28 @@ int No::getTotalArestas()
     return this->totalArestas;
 }
 
+void No::setPeso(float peso)
+{
+    this->peso = peso;
+}
+
+void No::setProx(No *prox)
+{
+    this->proxNo = prox;
+}
+
 /**
  * @brief Adiciona uma aresta no No
  * 
  * @param id 
  * @param peso 
  */
-void No::adicionarAresta(int id, double peso)
+void No::adicionarAresta(int targetId, int originId, float peso)
 {
-    Aresta *aresta = new Aresta(id);
+    Aresta *aresta = new Aresta(targetId, originId);
     aresta->setPeso(peso);
 
-    if (this->primeiraAresta != NULL)
+    if (this->primeiraAresta != nullptr)
     {
         this->ultimaAresta->setProx(aresta);
         this->ultimaAresta = aresta;
@@ -76,22 +91,22 @@ void No::adicionarAresta(int id, double peso)
  */
 Aresta* No::procurarAresta(int id)
 {
-    if (this->primeiraAresta == NULL)
+    if (this->primeiraAresta == nullptr)
     {
-        return NULL;
+        return nullptr;
     }
 
     Aresta *aux = primeiraAresta;
 
-    for (aux; aux != NULL; aux = aux->getProx())
+    for (aux; aux != nullptr; aux = aux->getProx())
     {
-        if(aux->getArestaId() == id)
+        if(aux->getTargetId() == id)
         {
             return aux;
         }
     }
 
-    return NULL;
+    return nullptr;
 }
 
 /**
@@ -103,7 +118,7 @@ void No::removerAresta(int id)
 {
     Aresta* arestaRemover = this->procurarAresta(id);
 
-    if (arestaRemover == NULL)
+    if (arestaRemover == nullptr)
     {
         //TODO: Tratar erro: retornar um int? um bool? lançar uma exception?
 
@@ -120,7 +135,7 @@ void No::removerAresta(int id)
 
     Aresta *proxAresta = arestaRemover->getProx();
 
-    if(arestaAnterior != NULL)
+    if(arestaAnterior != nullptr)
     {
         arestaAnterior->setProx(proxAresta); 
     } else {
@@ -149,12 +164,12 @@ void No::removerAresta(int id)
  */
 void No::removerTodasArestas()
 {
-    if (this->primeiraAresta != NULL)
+    if (this->primeiraAresta != nullptr)
     {
         Aresta *aux = this->primeiraAresta;
         Aresta *prox = this->primeiraAresta->getProx();
 
-        while (aux != NULL)
+        while (aux != nullptr)
         {
             delete aux;
             aux = prox;
@@ -164,7 +179,7 @@ void No::removerTodasArestas()
     }
 
     this->totalArestas = 0;
-    this->primeiraAresta = NULL;
-    this->ultimaAresta = NULL;
+    this->primeiraAresta = nullptr;
+    this->ultimaAresta = nullptr;
     
 }
