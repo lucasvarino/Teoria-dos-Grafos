@@ -11,6 +11,7 @@ class Grafo
         int ordem;
         bool direcionado;
         No *primeiroNo;
+        No *ultimoNo;
         bool ponderadoArestas;
         bool ponderadoNos;
 
@@ -21,8 +22,14 @@ class Grafo
         int getOrdem();
         bool getDirecionado();
         No* getPrimeiroNo();
+        No* getUltimoNo();
         bool getPonderadoArestas();
         bool getPonderadoNos();
+
+        void inserirNo(int id, float peso);
+        void removerNo(int id);
+        No* procurarNo(int id);
+        void adicionarAresta(int idOrigem, int idDestino, float peso);
         
 };
 
