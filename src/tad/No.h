@@ -12,6 +12,7 @@ class No
         No* proxNo;
         int totalArestas;
         float peso;
+        bool marcado; // Usado em caminhamento em largura
 
     public:
         No();
@@ -22,10 +23,12 @@ class No
         Aresta* getUltimaAresta();
         No* getProxNo();
         int getTotalArestas();
+        bool getMarcado();
         void setPeso(float peso);
         void setProx(No *prox);
+        void setMarcado(bool marcado);
 
-        void adicionarAresta(int targetId, int originId, float peso);
+        void adicionarAresta(int targetId, float peso);
         Aresta* procurarAresta(int id);
         void removerAresta(int id);
         void removerTodasArestas();
