@@ -30,6 +30,10 @@ class Grafo
         void removerNo(int id);
         No* procurarNo(int id);
         void adicionarAresta(int idOrigem, int idDestino, float peso);
+        int mapeamentoIndice(int *vet, int id);
+        void desmarcar();
+
+        void caminhamentoLargura(int id);
         
 };
 

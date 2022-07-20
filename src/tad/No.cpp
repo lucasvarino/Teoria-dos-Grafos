@@ -8,6 +8,7 @@ No::No()
     this->primeiraAresta = nullptr;
     this->ultimaAresta = nullptr;
     this->totalArestas = 0;
+    this->marcado = false;
 }
 
 No::~No()
@@ -48,6 +49,11 @@ int No::getTotalArestas()
     return this->totalArestas;
 }
 
+bool No::getMarcado()
+{
+    return this->marcado;
+}
+
 void No::setPeso(float peso)
 {
     this->peso = peso;
@@ -58,15 +64,20 @@ void No::setProx(No *prox)
     this->proxNo = prox;
 }
 
+void No::setMarcado(bool marcado)
+{
+    this->marcado = marcado;
+}
+
 /**
  * @brief Adiciona uma aresta no No
  * 
  * @param id 
  * @param peso 
  */
-void No::adicionarAresta(int targetId, int originId, float peso)
+void No::adicionarAresta(int targetId, float peso)
 {
-    Aresta *aresta = new Aresta(targetId, originId);
+    Aresta *aresta = new Aresta(this->id, targetId);
     aresta->setPeso(peso);
 
     if (this->primeiraAresta != nullptr)
