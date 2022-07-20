@@ -4,22 +4,27 @@
 class Aresta 
 {
     private:
-        int arestaId;
+        int targetId;
+        int originId;
         Aresta* prox;
         int totalArestas;
-        double pesoAresta;
+        float pesoAresta;
+        bool marcado; // Para funções de caminhamento
 
     public:
-        Aresta(int arestaId);
+        Aresta(int targetId, int originId);
         ~Aresta();
 
-        int getArestaId();
+        int getTargetId();
+        int getOriginId();
         int getTotalArestas();
-        double getPesoAresta();
+        float getPesoAresta();
+        bool getMarcado();
         Aresta* getProx();
 
         void setProx(Aresta* proxAresta);
-        void setPeso(double peso);
+        void setPeso(float peso);
+        void setMarcado(bool marcado);
 
 };
 

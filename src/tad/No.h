@@ -11,17 +11,24 @@ class No
         Aresta* ultimaAresta;
         No* proxNo;
         int totalArestas;
+        float peso;
+        bool marcado; // Usado em caminhamento em largura
 
     public:
         No();
         ~No();
 
+        int getId();
         Aresta* getPrimeiraAresta();
         Aresta* getUltimaAresta();
-        No* getPoxNo();
+        No* getProxNo();
         int getTotalArestas();
+        bool getMarcado();
+        void setPeso(float peso);
+        void setProx(No *prox);
+        void setMarcado(bool marcado);
 
-        void adicionarAresta(int id, double peso);
+        void adicionarAresta(int targetId, float peso);
         Aresta* procurarAresta(int id);
         void removerAresta(int id);
         void removerTodasArestas();

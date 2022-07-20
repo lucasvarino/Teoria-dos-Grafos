@@ -3,19 +3,24 @@
 
 using namespace std;
 
-Aresta::Aresta(int arestaId)
+Aresta::Aresta(int targetId, int originId)
 {
-    
+    this->targetId = targetId;
+    this->originId = originId;
+
+    this->prox = nullptr;
+    this->pesoAresta = 0;
+    this->marcado = false;
 }
 
 Aresta::~Aresta()
 {
     Aresta *aux = this->prox;
 
-    while (aux != NULL)
+    while (aux != nullptr)
     {
         delete aux;
-        aux = NULL;
+        aux = nullptr;
     }
     
     
@@ -23,9 +28,14 @@ Aresta::~Aresta()
 
 /* Getters */
 
-int Aresta::getArestaId()
+int Aresta::getTargetId()
 {
-    return this->arestaId;
+    return this->targetId;
+}
+
+int Aresta::getOriginId()
+{
+    return this->originId;
 }
 
 int Aresta::getTotalArestas()
@@ -33,7 +43,7 @@ int Aresta::getTotalArestas()
     return this->totalArestas;
 }
 
-double Aresta::getPesoAresta()
+float Aresta::getPesoAresta()
 {
     return this->pesoAresta;
 }
@@ -43,6 +53,11 @@ Aresta* Aresta::getProx()
     return this->prox;
 }
 
+bool Aresta::getMarcado()
+{
+    return this->marcado;
+}
+
 /* Setters */
 
 void Aresta::setProx(Aresta* proxAresta)
@@ -50,7 +65,12 @@ void Aresta::setProx(Aresta* proxAresta)
     this->prox = proxAresta;
 }
 
-void Aresta::setPeso(double peso)
+void Aresta::setPeso(float peso)
 {
     this->pesoAresta = peso;
+}
+
+void Aresta::setMarcado(bool marcado)
+{
+    this->marcado = marcado;
 }
