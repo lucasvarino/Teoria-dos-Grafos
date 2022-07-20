@@ -191,6 +191,14 @@ void Grafo::adicionarAresta(int idOrigem, int idDestino, float peso)
     this->ordem++;
 }
 
+
+/**
+ * @brief Função auxiliar para o mapeamento de índices, utilizada em funções de caminhamento
+ * 
+ * @param vet 
+ * @param id 
+ * @return int 
+ */
 int Grafo::mapeamentoIndice(int *vet, int id)
 {
     for (int i = 0; i < this->ordem; i++)
@@ -200,10 +208,16 @@ int Grafo::mapeamentoIndice(int *vet, int id)
     }
 
     cout << "Não foi encontrado nenhum vértice com esse id" << endl;
-    exit(1);
+    exit(1); // Para de executar o programa pois há um erro nos vértices
     
 }
 
+
+/**
+ * @brief Desmarca todos os nós do Grafo, utilizada principalmente em funções de
+ * caminhamento 
+ * 
+ */
 void Grafo::desmarcar()
 {
     No *no = this->primeiroNo;
@@ -232,6 +246,13 @@ void Grafo::desmarcar()
 // partir do mesmo em um percurso em largura indicando, para cada uma, se trata-se ou não de uma aresta
 // de retorno
 
+
+/**
+ * @brief Realiza o caminhamento em largura no grafo e imprime o conjunto de arestas do percurso,
+ * indicando se são ou não arestas de retorno
+ * 
+ * @param id 
+ */
 void Grafo::caminhamentoLargura(int id) // Verificar se está certo
 {
     No *no = this->procurarNo(id);
@@ -266,7 +287,7 @@ void Grafo::caminhamentoLargura(int id) // Verificar se está certo
                 //TODO: String a ser impressa
 
                 no->setMarcado(true);
-                fila.push(idDestino);
+                fila.push(idDestino); // Coloca na fila o próximo nó, pois ele foi visitado
                 
             }
 
