@@ -31,14 +31,35 @@ string linha;
             }
 */
 
-Grafo* leitura(ifstream &arquivo, int directed, int weightedEdge, int weightedNode, int order){
-    Grafo *grafo = new Grafo(directed, weightedEdge, weightedNode);
+Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int temPesoNo)
+{
+    cout << "chegou aqui 2";
+    Grafo *grafo = new Grafo(isDirecionado, temPesoAresta, temPesoNo);
 
-    
+    int idNo;
+    int pesoAresta;
+    int destinoNo;
+    int ordem;
 
+    arquivo >> ordem;
+
+    // leitura -> com peso nas arestas e com peso nos vertices
+    if (grafo->getPonderadoArestas() && grafo->getPonderadoNos())
+        while (arquivo >> idNo >> destinoNo >> pesoAresta)
+        {
+            grafo->inserirNo(idNo, 0); // 0 por enquanto
+            grafo->adicionarAresta(idNo, destinoNo, pesoAresta);
+        }
+    else if (!grafo->getPonderadoArestas()) // leitura -> sem peso nas arestas
+        while (arquivo >> idNo >> destinoNo)
+        {
+            grafo->inserirNo(idNo, 0);                  // 0 por enquanto
+            //grafo->adicionarAresta(idNo, destinoNo, 0); // peso 0 para todas // se descomentar isso nao roda o codigo
+        }
+
+    cout << "Grafo de ordem " << ordem << " ultimo no: " << grafo->getUltimoNo()->getId() << " ordem: " << grafo->getOrdem() << endl;
 
     return grafo;
-
 }
 
 void menu()
@@ -48,6 +69,7 @@ void menu()
 int main(int argc, char const *argv[])
 {
     // argv[1,2,...] = <arquivo_entrada> <arquivo_saida> <Opc_Direc> <Opc_Peso_Aresta> <Opc_Peso_Nos>
+    cout << "chegou aqui";
     std::ifstream arquivo;
     if (argc != 6)
         cout << "ERRO-> Todos os parametros sao necessários!";
@@ -66,16 +88,13 @@ int main(int argc, char const *argv[])
         }
         if (arquivo.is_open())
         {
-            int order;
-            int teste = 324131;
-            arquivo >> order; 
-            string Opc_Direc = argv[3]; //0 -> nao direcionado 1 -> direcionado
+            string Opc_Direc = argv[3];       // 0 -> nao direcionado 1 -> direcionado
             string Opc_Peso_Aresta = argv[4]; // 0 -> sem peso nas arestas 1 -> com peso nas arestas
-            string Opc_Peso_Nos = argv[5];// 0 -> sem peso nos nos 1 -> com peso nos nos
+            string Opc_Peso_Nos = argv[5];    // 0 -> sem peso nos nos 1 -> com peso nos nos
 
-            arquivo >> teste >> order;
-            //cout <<"oioi " << teste << " "<< order <<endl;
+            Grafo *grafo;
 
+           grafo = lerArquivo(arquivo, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
         }
     }
     return 0;
