@@ -3,12 +3,13 @@
 
 using namespace std;
 
-No::No()
+No::No(int id)
 {
     this->primeiraAresta = nullptr;
     this->ultimaAresta = nullptr;
     this->totalArestas = 0;
     this->marcado = false;
+    this->id = id;
 }
 
 No::~No()
