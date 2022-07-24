@@ -61,7 +61,7 @@ No* Grafo::getUltimoNo()
  */
 void Grafo::inserirNo(int id, float peso = 0)
 {
-    No *no = new No();
+    No *no = new No(id);
 
     if(this->ponderadoNos)
     {
@@ -77,6 +77,7 @@ void Grafo::inserirNo(int id, float peso = 0)
         this->ultimoNo->setProx(no);
         this->ultimoNo = no;
     }
+    
 
     ordem++;
 }

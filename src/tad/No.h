@@ -15,7 +15,7 @@ class No
         bool marcado; // Usado em caminhamento em largura
 
     public:
-        No();
+        No(int id);
         ~No();
 
         int getId();
