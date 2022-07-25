@@ -10,6 +10,8 @@ No::No(int id)
     this->totalArestas = 0;
     this->marcado = false;
     this->id = id;
+    this->grauEntrada = 0;
+    this->grauSaida = 0;
 }
 
 No::~No()
@@ -55,6 +57,16 @@ bool No::getMarcado()
     return this->marcado;
 }
 
+unsigned int No::getGrauEntrada()
+{
+    return this->grauEntrada;
+}
+
+unsigned int No::getGrauSaida()
+{
+    return this->grauSaida;
+}
+
 void No::setPeso(float peso)
 {
     this->peso = peso;
@@ -68,6 +80,26 @@ void No::setProx(No *prox)
 void No::setMarcado(bool marcado)
 {
     this->marcado = marcado;
+}
+
+void No::incrementarEntrada()
+{
+    this->grauEntrada++;
+}
+
+void No::incrementarSaida()
+{
+    this->grauSaida++;
+}
+
+void No::decrementarEntrada()
+{
+    this->grauEntrada--;
+}
+
+void No::decrementarSaida()
+{
+    this->grauSaida--;
 }
 
 /**

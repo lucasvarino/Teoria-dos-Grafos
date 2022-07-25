@@ -12,6 +12,8 @@ class No
         No* proxNo;
         int totalArestas;
         float peso;
+        unsigned int grauEntrada;
+        unsigned int grauSaida;
         bool marcado; // Usado em caminhamento em largura
 
     public:
@@ -24,9 +26,17 @@ class No
         No* getProxNo();
         int getTotalArestas();
         bool getMarcado();
+        unsigned int getGrauEntrada();
+        unsigned int getGrauSaida();
+
         void setPeso(float peso);
         void setProx(No *prox);
         void setMarcado(bool marcado);
+
+        void incrementarEntrada();
+        void incrementarSaida();
+        void decrementarEntrada();
+        void decrementarSaida();
 
         void adicionarAresta(int targetId, float peso);
         bool procurarAresta(int id);

@@ -14,6 +14,7 @@ Grafo::Grafo(int ordem, bool direcionado, bool ponderadoArestas, bool ponderadoV
     this->ponderadoNos = ponderadoVertices;
     this->primeiroNo = nullptr;
     this->ultimoNo = nullptr;
+    this->totalArestas = 0;
 }
 
 Grafo::~Grafo()
@@ -33,6 +34,11 @@ Grafo::~Grafo()
 int Grafo::getOrdem()
 {
     return this->ordem;
+}
+
+int Grafo::getTotalArestas()
+{
+    return this->totalArestas;
 }
 
 bool Grafo::getPonderadoArestas()
@@ -184,6 +190,7 @@ void Grafo::adicionarAresta(int idOrigem, int idDestino, float peso)
         if(!origem->procurarAresta(idDestino))
         {
             origem->adicionarAresta(idDestino, peso);
+            this->totalArestas++;
         }
     }
 }
@@ -305,7 +312,7 @@ void Grafo::caminhamentoLargura(int id) // Verificar se está certo
 // Parâmetro: dois IDs de vértices do grafo; (1 ponto)
 // Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Djkstra;
 
-string Grafo::djkstra(ofstream &file)
+string Grafo::djkstra()
 {
     int idOrigem, idDestino;
     No *noOrigem, *noDestino;
@@ -397,9 +404,70 @@ string Grafo::djkstra(ofstream &file)
     while (!listaDisponiveis.empty())
     {
         // Verificar grau de saída
-
         
+        if(noAtual->getGrauSaida() < 1)
+        {
+            idMenorCustoCaminho = this->extrairIdMenorCustoDisponivel(custos, &listaDisponiveis);
+
+            if(idMenorCustoCaminho < 1)
+                break;
+
+            menorCustoCaminho = custos[idMenorCustoCaminho - 1];
+        } else {
+            atualizouAuxiliaresMenorCusto = false;
+            menorCustoCaminhoAux = INFINITY;
+            arestaAtual = noAtual->getPrimeiraAresta();
+
+            while (arestaAtual != nullptr)
+            {
+                if(arestaAtual->getPesoAresta() < 0)
+                {
+                    cout << "Erro: Aresta com peso negativo no Grafo!" << endl;
+                    return "";
+                }
+
+                noDestino = this->procurarNo(arestaAtual->getTargetId());
+
+                if(this->inList(noDestino->getId(), &listaDisponiveis))
+                {
+                    if(custos[noDestino->getId() - 1] > arestaAtual->getPesoAresta() + menorCustoCaminho)
+                    {
+                        custos[noDestino->getId() - 1] = arestaAtual->getPesoAresta() + menorCustoCaminho;
+                        vPais[noDestino->getId() - 1] = noAtual;
+
+                        if(custos[noDestino->getId() - 1] < menorCustoCaminhoAux)
+                        {
+                            menorCustoCaminhoAux = custos[noDestino->getId() - 1];
+                            idMenorCustoCaminhoAux = noDestino->getId();
+                            atualizouAuxiliaresMenorCusto = true;
+                        }
+                    }
+                }
+
+                arestaAtual = arestaAtual->getProx();
+            }
+
+            if(atualizouAuxiliaresMenorCusto)
+            {
+                menorCustoCaminho = menorCustoCaminhoAux;
+                idMenorCustoCaminho = idMenorCustoCaminhoAux;
+            } else {
+                idMenorCustoCaminho = this->extrairIdMenorCustoDisponivel(custos, &listaDisponiveis);
+                menorCustoCaminho = custos[idMenorCustoCaminho - 1];
+            }
+            
+        }
+
+        noAtual = this->procurarNo(idMenorCustoCaminho);
+        this->retirarElementoLista(&listaDisponiveis, idMenorCustoCaminho);
+
     }
+
+    cout << "\n O caminho mínimo entre os vértices é: " << custos[noDestino->getId() - 1] << endl;
+
+    // Gerar o caminho mínimo
+
+    return "";
     
     
 }
@@ -415,3 +483,34 @@ void Grafo::retirarElementoLista(list<int> *listaVerticesDisponiveis, int vertic
     }
 }
 
+int Grafo::extrairIdMenorCustoDisponivel(float *custos, list<int> *listaDisponiveis)
+{
+    int idMenorCusto = 0;
+    float menorCusto = INFINITY;
+
+    for (int i = 0; i < this->ordem; i++)
+    {
+        if(this->inList(i + 1, listaDisponiveis))
+        {
+            if(custos[i] < menorCusto)
+            {
+                menorCusto = custos[i];
+                idMenorCusto = i + 1;
+            }
+        }
+    }
+    
+    return idMenorCusto;
+}
+
+bool Grafo::inList(int id, list<int> *listaDisponiveis)
+{
+    for (auto item = listaDisponiveis->begin(); item != listaDisponiveis->end(); item++)
+    {
+        if(*item == id)
+            return true;
+    }
+
+    return false;
+    
+}
