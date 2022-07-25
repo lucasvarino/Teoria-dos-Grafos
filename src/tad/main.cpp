@@ -56,6 +56,9 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
         }
 
     cout << "Grafo de ordem " << ordem << " ultimo no: " << grafo->getUltimoNo()->getId() << " ordem: " << grafo->getOrdem() << endl;
+    cout << "Total de Arestas: " << grafo->getTotalArestas();
+
+    grafo->djkstra();
 
     return grafo;
 }
