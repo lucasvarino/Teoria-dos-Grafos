@@ -192,3 +192,14 @@ void No::removerTodasArestas()
     this->ultimaAresta = nullptr;
     
 }
+
+Aresta* No::arestasEntre(int id)
+{
+    for(Aresta *aux = this->primeiraAresta; aux != nullptr; aux = aux->getProx())
+    {
+        if(aux->getTargetId() == id)
+            return aux;
+    }
+
+    return nullptr;
+}

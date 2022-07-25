@@ -1,5 +1,7 @@
 #include <iostream>
 #include <queue>
+#include <cmath>
+#include <list>
 #include "Grafo.h"
 
 using namespace std;
@@ -298,5 +300,118 @@ void Grafo::caminhamentoLargura(int id) // Verificar se está certo
     this->desmarcar();
     
     
+}
+
+// Parâmetro: dois IDs de vértices do grafo; (1 ponto)
+// Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Djkstra;
+
+string Grafo::djkstra(ofstream &file)
+{
+    int idOrigem, idDestino;
+    No *noOrigem, *noDestino;
+
+    string idO, idD;
+
+    try
+    {
+        cout << "Nó de Origem: " << endl;
+        cin >> idO;
+        cout << "Nó de Destino: " << endl;
+        cin >> idD;
+
+        idOrigem = stoi(idO);
+        idDestino = stoi(idD);
+    }
+    catch(const std::exception& e)
+    {
+        cout << "Erro ao processar os parâmetros da função" << endl;
+        return 0;
+    }
+
+    if(idOrigem == idDestino)
+    {
+        cout << "\nA distância é: 0" << endl;
+        return 0;
+    }
+
+    noOrigem = this->procurarNo(idOrigem);
+    noDestino = this->procurarNo(idDestino);
+
+    if(noOrigem == nullptr || noDestino == nullptr)
+    {
+        cout << "Não foram encontrados nós com os ids escolhidos" << endl;
+        return 0;
+    }
+
+    No *noAtual = this->primeiroNo;
+
+    float custos[this->ordem], menorCustoCaminho = INFINITY, menorCustoCaminhoAux;
+
+    No *vPais[this->ordem];
+
+    list<int> listaDisponiveis;
+    Aresta *arestaAtual;
+
+    int idMenorCustoCaminho, idMenorCustoCaminhoAux;
+
+    while (noAtual != nullptr)
+    {
+        if(noAtual != noOrigem)
+        {
+            listaDisponiveis.push_back(noAtual->getId());
+        }
+
+        arestaAtual = noOrigem->arestasEntre(noAtual->getId());
+
+        if(arestaAtual != nullptr && arestaAtual->getPesoAresta() < 0)
+        {
+            cout << "Não é possível executar o algoritmo com arestas com peso negativo" << endl;
+            return "";
+        }
+
+        if(arestaAtual != nullptr)
+        {
+            vPais[noAtual->getId() - 1] = noOrigem;
+            custos[noAtual->getId() - 1] = arestaAtual->getPesoAresta();
+
+            if(arestaAtual->getPesoAresta() < menorCustoCaminho)
+            {
+                menorCustoCaminho = arestaAtual->getPesoAresta();
+                idMenorCustoCaminho = noAtual->getId();
+            }
+        } else {
+            custos[noAtual->getId() - 1] = INFINITY;
+            vPais[noAtual->getId() - 1] = nullptr;
+        }
+
+        noAtual = noAtual->getProxNo();
+    }
+
+    custos[noOrigem->getId() - 1] = 0;
+
+    noAtual = this->procurarNo(idMenorCustoCaminho);
+    retirarElementoLista(&listaDisponiveis, idMenorCustoCaminho);
+
+    bool atualizouAuxiliaresMenorCusto;
+
+    while (!listaDisponiveis.empty())
+    {
+        // Verificar grau de saída
+
+        
+    }
+    
+    
+}
+
+void Grafo::retirarElementoLista(list<int> *listaVerticesDisponiveis, int verticeMenorCaminhoAtual){
+    //percorre a lista de vertices disponiveis
+    for(auto it = listaVerticesDisponiveis->begin(); it!=listaVerticesDisponiveis->end();it++){
+        if(*it == verticeMenorCaminhoAtual)
+        {
+            listaVerticesDisponiveis->erase(it);
+            break;
+        }
+    }
 }
 

@@ -32,6 +32,8 @@ class No
         bool procurarAresta(int id);
         void removerAresta(int id);
         void removerTodasArestas();
+
+        Aresta* arestasEntre(int id);
 };
 
 #endif // NO_H_INCLUDED

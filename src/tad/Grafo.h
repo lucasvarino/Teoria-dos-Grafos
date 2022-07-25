@@ -2,6 +2,7 @@
 #define GRAFO_H_INCLUDED
 
 #include "No.h"
+#include <list>
 
 using namespace std;
 
@@ -34,6 +35,9 @@ class Grafo
         void desmarcar();
 
         void caminhamentoLargura(int id);
+
+        string djkstra(ofstream &file);
+        void retirarElementoLista(list<int> *listaDisponiveis, int verticeMenorCaminho);
         
 };
 
