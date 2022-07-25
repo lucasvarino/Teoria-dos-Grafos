@@ -91,6 +91,7 @@ void No::adicionarAresta(int targetId, float peso)
     }
 
     this->primeiraAresta = aresta;
+    this->ultimaAresta = aresta;
     this->totalArestas++;
     
 }
@@ -101,24 +102,21 @@ void No::adicionarAresta(int targetId, float peso)
  * @param id 
  * @return NULL caso a aresta não seja encontrada ou Aresta*
  */
-Aresta* No::procurarAresta(int id)
+bool No::procurarAresta(int id)
 {
-    if (this->primeiraAresta == nullptr)
+    if(this->primeiraAresta != nullptr)
     {
-        return nullptr;
-    }
-
-    Aresta *aux = primeiraAresta;
-
-    for (aux; aux != nullptr; aux = aux->getProx())
-    {
-        if(aux->getTargetId() == id)
+        for (Aresta *aux = this->primeiraAresta; aux != nullptr; aux = aux->getProx())
         {
-            return aux;
+            if(aux->getTargetId() == id)
+                return true;
         }
+        
     }
 
-    return nullptr;
+    return false;
+
+    
 }
 
 /**
@@ -128,9 +126,8 @@ Aresta* No::procurarAresta(int id)
  */
 void No::removerAresta(int id)
 {
-    Aresta* arestaRemover = this->procurarAresta(id);
 
-    if (arestaRemover == nullptr)
+    if (!this->procurarAresta(id))
     {
         //TODO: Tratar erro: retornar um int? um bool? lançar uma exception?
 
@@ -138,35 +135,35 @@ void No::removerAresta(int id)
         exit(1);
     }
 
-    Aresta *arestaAnterior = this->primeiraAresta;
+    Aresta *aux = this->primeiraAresta;
+    Aresta *arestaAnterior = nullptr;
 
-    while (arestaAnterior->getProx() != arestaRemover)
+    while (aux->getTargetId() != id)
     {
-        arestaAnterior = arestaAnterior->getProx();
+        arestaAnterior = aux;
+        aux = aux->getProx();
     }
-
-    Aresta *proxAresta = arestaRemover->getProx();
 
     if(arestaAnterior != nullptr)
     {
-        arestaAnterior->setProx(proxAresta); 
+        arestaAnterior->setProx(aux->getProx()); 
     } else {
-        this->primeiraAresta->setProx(proxAresta);
+        this->primeiraAresta = aux->getProx();
     }
 
-    if(this->ultimaAresta == arestaRemover)
+    if(this->ultimaAresta == aux)
     {
         this->ultimaAresta = arestaAnterior;
     }
 
-    if (proxAresta == this->ultimaAresta)
+    if (aux->getProx() == this->ultimaAresta)
     {
-        this->ultimaAresta = proxAresta;
+        this->ultimaAresta = aux->getProx();
     }
     
 
+    delete aux;
     this->totalArestas--;
-    delete arestaRemover;
     
 }
 

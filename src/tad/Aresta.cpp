@@ -15,14 +15,11 @@ Aresta::Aresta(int targetId, int originId)
 
 Aresta::~Aresta()
 {
-    Aresta *aux = this->prox;
-
-    while (aux != nullptr)
+    if(this->prox != nullptr)
     {
-        delete aux;
-        aux = nullptr;
-    }
-    
+        delete this->prox;
+        this->prox = nullptr;
+    }   
     
 }
 

@@ -16,7 +16,7 @@ class Grafo
         bool ponderadoNos;
 
     public:
-        Grafo(bool direcionado, bool ponderadoArestas, bool ponderadoNos);
+        Grafo(int ordem, bool direcionado, bool ponderadoArestas, bool ponderadoNos);
         ~Grafo();
 
         int getOrdem();
