@@ -29,7 +29,7 @@ class No
         void setMarcado(bool marcado);
 
         void adicionarAresta(int targetId, float peso);
-        Aresta* procurarAresta(int id);
+        bool procurarAresta(int id);
         void removerAresta(int id);
         void removerTodasArestas();
 };

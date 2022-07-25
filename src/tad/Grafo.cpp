@@ -4,9 +4,9 @@
 
 using namespace std;
 
-Grafo::Grafo(bool direcionado, bool ponderadoArestas, bool ponderadoVertices)
+Grafo::Grafo(int ordem, bool direcionado, bool ponderadoArestas, bool ponderadoVertices)
 {
-    this->ordem = 0;
+    this->ordem = ordem;
     this->direcionado = direcionado;
     this->ponderadoArestas = ponderadoArestas;
     this->ponderadoNos = ponderadoVertices;
@@ -77,9 +77,6 @@ void Grafo::inserirNo(int id, float peso = 0)
         this->ultimoNo->setProx(no);
         this->ultimoNo = no;
     }
-    
-
-    ordem++;
 }
 
 /**
@@ -146,6 +143,8 @@ No* Grafo::procurarNo(int id)
         {
             return aux;
         }
+
+        aux = aux->getProxNo();
     }
 
     return nullptr;
@@ -169,11 +168,13 @@ void Grafo::adicionarAresta(int idOrigem, int idDestino, float peso)
     if(origem == nullptr)
     {
         this->inserirNo(idOrigem);
+        origem = this->procurarNo(idOrigem);
     }
 
     if(destino == nullptr)
     {
         this->inserirNo(idDestino);
+        destino = this->procurarNo(idDestino);
     }
 
     if(origem != nullptr && destino != nullptr)
@@ -181,15 +182,8 @@ void Grafo::adicionarAresta(int idOrigem, int idDestino, float peso)
         if(!origem->procurarAresta(idDestino))
         {
             origem->adicionarAresta(idDestino, peso);
-
-            if(!this->direcionado && destino->procurarAresta(idOrigem))
-            {
-                destino->adicionarAresta(idOrigem, peso);
-            }
         }
     }
-
-    this->ordem++;
 }
 
 

@@ -33,14 +33,13 @@ string linha;
 
 Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int temPesoNo)
 {
-    Grafo *grafo = new Grafo(isDirecionado, temPesoAresta, temPesoNo);
-
     int idNo;
     int pesoAresta;
     int destinoNo;
     int ordem;
 
     arquivo >> ordem;
+    Grafo *grafo = new Grafo(ordem, isDirecionado, temPesoAresta, temPesoNo);
 
     // leitura -> com peso nas arestas e com peso nos vertices
     if (grafo->getPonderadoArestas() && grafo->getPonderadoNos())
@@ -53,7 +52,7 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
         while (arquivo >> idNo >> destinoNo)
         {
             grafo->inserirNo(idNo, 0);                  // 0 por enquanto
-            //grafo->adicionarAresta(idNo, destinoNo, 0); // peso 0 para todas // se descomentar isso nao roda o codigo
+            grafo->adicionarAresta(idNo, destinoNo, 0); // peso 0 para todas // se descomentar isso nao roda o codigo
         }
 
     cout << "Grafo de ordem " << ordem << " ultimo no: " << grafo->getUltimoNo()->getId() << " ordem: " << grafo->getOrdem() << endl;
