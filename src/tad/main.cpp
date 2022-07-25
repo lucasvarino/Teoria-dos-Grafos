@@ -12,25 +12,6 @@ IOS:
 será gravado o grafo armazenado na memória ao término do;
 
 */
-
-/*
-string linha;
-            int numberNodes = 0;
-            getline(arquivo, linha);
-            numberNodes = stoi(linha);
-            linha += "\n";
-            int edgeWeigh = 0;
-            int nodeId = 0;
-            string graphInString = "";
-            while (!arquivo.eof() && linha != "")
-            {
-                string aux = linha;
-                getline(arquivo, linha);
-                aux.append(linha);
-                linha = aux + "\n";
-            }
-*/
-
 Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int temPesoNo)
 {
     int idNo;
@@ -52,7 +33,7 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
         while (arquivo >> idNo >> destinoNo)
         {
             grafo->inserirNo(idNo, 0);                  // 0 por enquanto
-            grafo->adicionarAresta(idNo, destinoNo, 0); // peso 0 para todas // se descomentar isso nao roda o codigo
+            grafo->adicionarAresta(idNo, destinoNo, 0); // peso 0 para todas 
         }
 
     cout << "Grafo de ordem " << ordem << " ultimo no: " << grafo->getUltimoNo()->getId() << " ordem: " << grafo->getOrdem() << endl;
@@ -81,6 +62,12 @@ void menu(Grafo *grafo, string arquivoSaida)
         cout<<"Escolha o ID para o fecho transitivo direto: ";
         cin>>escolha;
         grafo->fechoTransitivoDireto(escolha);
+        menu(grafo, "oi");
+        break;
+    case 2:
+        cout<<"Escolha o ID para o fecho transitivo indireto: ";
+        cin>>escolha;
+        grafo->fechoTransitivoIndireto(escolha);
         menu(grafo, "oi");
         break;
     

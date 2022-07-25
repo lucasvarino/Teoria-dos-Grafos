@@ -35,6 +35,7 @@ class Grafo
 
         void caminhamentoLargura(int id);
         void fechoTransitivoDireto(int );
+        void fechoTransitivoIndireto(int );
         void caminhamentoProfundidade(No *);
         
 };
