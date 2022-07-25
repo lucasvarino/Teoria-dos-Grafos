@@ -28,7 +28,6 @@ Grafo::~Grafo()
         delete no;
         no = auxNo;
     }
-    
 }
 
 int Grafo::getOrdem()
@@ -51,36 +50,37 @@ bool Grafo::getPonderadoNos()
     return this->ponderadoNos;
 }
 
-No* Grafo::getPrimeiroNo()
+No *Grafo::getPrimeiroNo()
 {
     return this->primeiroNo;
 }
 
-No* Grafo::getUltimoNo()
+No *Grafo::getUltimoNo()
 {
     return this->ultimoNo;
 }
 
 /**
  * @brief Insere um nó no Grafo
- * 
- * @param id 
- * @param peso 
+ *
+ * @param id
+ * @param peso
  */
 void Grafo::inserirNo(int id, float peso = 0)
 {
     No *no = new No(id);
 
-    if(this->ponderadoNos)
+    if (this->ponderadoNos)
     {
         no->setPeso(peso);
     }
 
-    if(this->primeiroNo == nullptr)
+    if (this->primeiroNo == nullptr)
     {
         this->primeiroNo = no;
         this->ultimoNo = no;
-    } else 
+    }
+    else
     {
         this->ultimoNo->setProx(no);
         this->ultimoNo = no;
@@ -89,14 +89,14 @@ void Grafo::inserirNo(int id, float peso = 0)
 
 /**
  * @brief Remove o nó com id recebido por parâmetro
- * 
- * @param id 
+ *
+ * @param id
  */
 void Grafo::removerNo(int id)
 {
     No *no = this->procurarNo(id);
 
-    if(no == nullptr)
+    if (no == nullptr)
     {
         cout << "Não foi encontrado nenhum nó com o id " << id << endl;
         return;
@@ -104,7 +104,7 @@ void Grafo::removerNo(int id)
 
     No *aux = this->primeiroNo;
 
-    if(this->primeiroNo->getId() == id)
+    if (this->primeiroNo->getId() == id)
     {
         this->primeiroNo = aux->getProxNo();
         delete aux;
@@ -115,11 +115,11 @@ void Grafo::removerNo(int id)
 
     while (no != nullptr)
     {
-        if(no->getId() == id)
+        if (no->getId() == id)
         {
             aux->setProx(no->getProxNo());
 
-            if(no == this->ultimoNo)
+            if (no == this->ultimoNo)
             {
                 ultimoNo = aux;
             }
@@ -132,22 +132,21 @@ void Grafo::removerNo(int id)
         no = no->getProxNo();
         aux = aux->getProxNo();
     }
-    
 }
 
 /**
  * @brief Procura pelo nó com o id recebido por parâmetro
- * 
- * @param id 
+ *
+ * @param id
  * @return No* ou nullptr caso não seja encontrado
  */
-No* Grafo::procurarNo(int id)
+No *Grafo::procurarNo(int id)
 {
     No *aux = this->primeiroNo;
 
     while (aux != nullptr)
     {
-        if(aux->getId() == id)
+        if (aux->getId() == id)
         {
             return aux;
         }
@@ -156,38 +155,37 @@ No* Grafo::procurarNo(int id)
     }
 
     return nullptr;
-    
 }
 
 /**
  * @brief Adiciona uma aresta no Grafo
- * 
- * @param idOrigem 
- * @param idDestino 
- * @param peso 
+ *
+ * @param idOrigem
+ * @param idDestino
+ * @param peso
  */
 void Grafo::adicionarAresta(int idOrigem, int idDestino, float peso)
 {
-    //TODO: Verificar se está funcionando corretamente.
+    // TODO: Verificar se está funcionando corretamente.
 
     No *origem = this->procurarNo(idOrigem);
     No *destino = this->procurarNo(idDestino);
 
-    if(origem == nullptr)
+    if (origem == nullptr)
     {
         this->inserirNo(idOrigem);
         origem = this->procurarNo(idOrigem);
     }
 
-    if(destino == nullptr)
+    if (destino == nullptr)
     {
         this->inserirNo(idDestino);
         destino = this->procurarNo(idDestino);
     }
 
-    if(origem != nullptr && destino != nullptr)
+    if (origem != nullptr && destino != nullptr)
     {
-        if(!origem->procurarAresta(idDestino))
+        if (!origem->procurarAresta(idDestino))
         {
             origem->adicionarAresta(idDestino, peso);
             this->totalArestas++;
@@ -195,32 +193,29 @@ void Grafo::adicionarAresta(int idOrigem, int idDestino, float peso)
     }
 }
 
-
 /**
  * @brief Função auxiliar para o mapeamento de índices, utilizada em funções de caminhamento
- * 
- * @param vet 
- * @param id 
- * @return int 
+ *
+ * @param vet
+ * @param id
+ * @return int
  */
 int Grafo::mapeamentoIndice(int *vet, int id)
 {
     for (int i = 0; i < this->ordem; i++)
     {
-        if(vet[i] == id)
+        if (vet[i] == id)
             return id;
     }
 
     cout << "Não foi encontrado nenhum vértice com esse id" << endl;
     exit(1); // Para de executar o programa pois há um erro nos vértices
-    
 }
-
 
 /**
  * @brief Desmarca todos os nós do Grafo, utilizada principalmente em funções de
- * caminhamento 
- * 
+ * caminhamento
+ *
  */
 void Grafo::desmarcar()
 {
@@ -236,26 +231,22 @@ void Grafo::desmarcar()
             aresta->setMarcado(false);
             aresta = aresta->getProx();
         }
-        
 
         no = no->getProxNo();
     }
-    
 }
 
 // Funcionalidades do Trabalho -
-
 
 // Caminhamento em Largura - a função deve receber como parâmetro o Id de um nó e imprimir o conjunto de arestas visitadas a
 // partir do mesmo em um percurso em largura indicando, para cada uma, se trata-se ou não de uma aresta
 // de retorno
 
-
 /**
  * @brief Realiza o caminhamento em largura no grafo e imprime o conjunto de arestas do percurso,
  * indicando se são ou não arestas de retorno
- * 
- * @param id 
+ *
+ * @param id
  */
 void Grafo::caminhamentoLargura(int id) // Verificar se está certo
 {
@@ -286,13 +277,12 @@ void Grafo::caminhamentoLargura(int id) // Verificar se está certo
             idAtual = no->getId();
             idDestino = no->getId();
 
-            if(!noDestino->getMarcado())
+            if (!noDestino->getMarcado())
             {
-                //TODO: String a ser impressa
+                // TODO: String a ser impressa
 
                 no->setMarcado(true);
                 fila.push(idDestino); // Coloca na fila o próximo nó, pois ele foi visitado
-                
             }
 
             // TODO: Verificar arestas de retorno.
@@ -301,13 +291,45 @@ void Grafo::caminhamentoLargura(int id) // Verificar se está certo
 
         fila.pop();
         no = this->procurarNo(fila.front());
-        
     }
 
     this->desmarcar();
-    
-    
 }
+
+void Grafo::caminhamentoProfundidade(No *no)
+{
+    no->setMarcado(true);
+    for (Aresta *aux = no->getPrimeiraAresta(); aux != nullptr; aux = aux->getProx())
+    {
+        if (!this->procurarNo(aux->getTargetId())->getMarcado())
+        {
+            caminhamentoProfundidade(this->procurarNo(aux->getTargetId()));
+        }
+    }
+}
+
+// Fecho transitivo direto grafo direcionado
+
+void Grafo::fechoTransitivoDireto(int id)
+{
+    No *no = this->procurarNo(id);
+    if (no == nullptr)
+        cout << "ID inexistente!!" << endl;
+    else
+    {
+        this->caminhamentoProfundidade(no);
+        cout<<"Fecho transitivo direto: { ";
+        for (no = this->primeiroNo; no != nullptr; no = no->getProxNo())
+        {
+            Aresta *aresta = no->getPrimeiraAresta();
+            if (no->getMarcado())
+            {
+                cout << no->getId() << " - ";
+            }
+        }
+    }
+    cout <<" }"<< endl;
+
 
 // Parâmetro: dois IDs de vértices do grafo; (1 ponto)
 // Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Djkstra;
@@ -512,5 +534,4 @@ bool Grafo::inList(int id, list<int> *listaDisponiveis)
     }
 
     return false;
-    
 }

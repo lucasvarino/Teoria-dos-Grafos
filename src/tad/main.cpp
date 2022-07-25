@@ -63,23 +63,51 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
     return grafo;
 }
 
-void menu()
+void menu(Grafo *grafo, string arquivoSaida)
 {
+    int escolha;
+    cout<<"MENU:"<<endl;
+    cout<<"[1] Fecho transitivo direto"<<endl;
+    cout<<"[2] Fecho transitivo indireto"<<endl;
+
+    cout<<"[0] Sair"<<endl;
+
+    cout<<"Digite o valor desejado: ";
+    cin>>escolha;
+    switch (escolha)
+    {
+    case 0:
+        cout<<"Au revoir!"<<endl;
+        exit(0);
+        break;
+    case 1:
+        cout<<"Escolha o ID para o fecho transitivo direto: ";
+        cin>>escolha;
+        grafo->fechoTransitivoDireto(escolha);
+        menu(grafo, "oi");
+        break;
+    
+    default:
+        break;
+    }
+    
 }
 
 int main(int argc, char const *argv[])
 {
     // argv[1,2,...] = <arquivo_entrada> <arquivo_saida> <Opc_Direc> <Opc_Peso_Aresta> <Opc_Peso_Nos>
     std::ifstream arquivo;
+    string arquivoEntrada = argv[1];
+    string arquivoSaida = argv[2];
+    
+    Grafo *grafo;
     if (argc != 6)
         cout << "ERRO-> Todos os parametros sao necessários!";
     else
     {
-        string inputTxtPath = argv[1];
-        string outputTxtPath = argv[2];
         try
         {
-            arquivo.open(inputTxtPath, ios::in);
+            arquivo.open(arquivoEntrada, ios::in);
         }
         catch (const std::exception &e)
         {
@@ -92,10 +120,9 @@ int main(int argc, char const *argv[])
             string Opc_Peso_Aresta = argv[4]; // 0 -> sem peso nas arestas 1 -> com peso nas arestas
             string Opc_Peso_Nos = argv[5];    // 0 -> sem peso nos nos 1 -> com peso nos nos
 
-            Grafo *grafo;
-
-           grafo = lerArquivo(arquivo, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
+            grafo = lerArquivo(arquivo, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
         }
+        menu(grafo, "oi");
     }
     return 0;
 }

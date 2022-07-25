@@ -37,6 +37,8 @@ class Grafo
         void desmarcar();
 
         void caminhamentoLargura(int id);
+        void fechoTransitivoDireto(int );
+        void caminhamentoProfundidade(No *);
 
         string djkstra();
         void retirarElementoLista(list<int> *listaDisponiveis, int verticeMenorCaminho);
