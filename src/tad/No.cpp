@@ -78,7 +78,7 @@ void No::setMarcado(bool marcado)
  */
 void No::adicionarAresta(int targetId, float peso)
 {
-    Aresta *aresta = new Aresta(this->id, targetId);
+    Aresta *aresta = new Aresta(targetId, this->id);
     aresta->setPeso(peso);
 
     if (this->primeiraAresta != nullptr)

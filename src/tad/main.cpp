@@ -93,7 +93,7 @@ int main(int argc, char const *argv[])
 
             grafo = lerArquivo(arquivo, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
         }
-        menu(grafo, arquivoSaida);
+        grafo->fechoTransitivoDireto(3);
     }
     return 0;
 }
