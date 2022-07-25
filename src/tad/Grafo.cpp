@@ -314,12 +314,13 @@ void Grafo::caminhamentoProfundidade(No *no)
 void Grafo::fechoTransitivoDireto(int id)
 {
     No *no = this->procurarNo(id);
+    this->desmarcar();
     if (no == nullptr)
         cout << "ID inexistente!!" << endl;
     else
     {
         this->caminhamentoProfundidade(no);
-        cout<<"Fecho transitivo direto: { ";
+        cout << "Fecho transitivo direto: [ ";
         for (no = this->primeiroNo; no != nullptr; no = no->getProxNo())
         {
             Aresta *aresta = no->getPrimeiraAresta();
@@ -329,9 +330,32 @@ void Grafo::fechoTransitivoDireto(int id)
             }
         }
     }
-    cout <<" }"<< endl;
+    cout << " ]" << endl;
 }
 
+void Grafo::fechoTransitivoIndireto(int id)
+{
+    No *alvo = this->procurarNo(id);
+    No *verf = this->getPrimeiroNo();
+    cout << "Fecho transitivo indireto: [";
+    if (alvo != nullptr)
+    {
+        while (verf != nullptr)
+        {
+            this->desmarcar();
+            this->caminhamentoProfundidade(verf);
+
+            if (alvo->getMarcado())
+                if (verf->getId() == id)
+                    cout << "";
+                else
+                    cout << verf->getId() << " - ";
+
+            verf = verf->getProxNo();
+        }
+    }
+    cout << "]" << endl;
+}
 // Parâmetro: dois IDs de vértices do grafo; (1 ponto)
 // Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Djkstra;
 
