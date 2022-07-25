@@ -13,24 +13,6 @@ será gravado o grafo armazenado na memória ao término do;
 
 */
 
-/*
-string linha;
-            int numberNodes = 0;
-            getline(arquivo, linha);
-            numberNodes = stoi(linha);
-            linha += "\n";
-            int edgeWeigh = 0;
-            int nodeId = 0;
-            string graphInString = "";
-            while (!arquivo.eof() && linha != "")
-            {
-                string aux = linha;
-                getline(arquivo, linha);
-                aux.append(linha);
-                linha = aux + "\n";
-            }
-*/
-
 Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int temPesoNo)
 {
     int idNo;
