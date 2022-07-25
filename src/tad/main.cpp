@@ -33,8 +33,6 @@ string linha;
 
 Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int temPesoNo)
 {
-    cout << "chegou aqui 2";
-
     int idNo;
     int pesoAresta;
     int destinoNo;
@@ -69,7 +67,6 @@ void menu()
 int main(int argc, char const *argv[])
 {
     // argv[1,2,...] = <arquivo_entrada> <arquivo_saida> <Opc_Direc> <Opc_Peso_Aresta> <Opc_Peso_Nos>
-    cout << "chegou aqui";
     std::ifstream arquivo;
     if (argc != 6)
         cout << "ERRO-> Todos os parametros sao necessários!";
