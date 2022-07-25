@@ -13,24 +13,6 @@ será gravado o grafo armazenado na memória ao término do;
 
 */
 
-/*
-string linha;
-            int numberNodes = 0;
-            getline(arquivo, linha);
-            numberNodes = stoi(linha);
-            linha += "\n";
-            int edgeWeigh = 0;
-            int nodeId = 0;
-            string graphInString = "";
-            while (!arquivo.eof() && linha != "")
-            {
-                string aux = linha;
-                getline(arquivo, linha);
-                aux.append(linha);
-                linha = aux + "\n";
-            }
-*/
-
 Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int temPesoNo)
 {
     int idNo;
@@ -58,7 +40,14 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
     cout << "Grafo de ordem " << ordem << " ultimo no: " << grafo->getUltimoNo()->getId() << " ordem: " << grafo->getOrdem() << endl;
     cout << "Total de Arestas: " << grafo->getTotalArestas();
 
-    grafo->djkstra();
+    
+    int idOrigem, idDestino;
+    cout << endl << "Id No1" << endl;
+    cin >> idOrigem;
+    cout << "Id no2" << endl;
+    cin >> idDestino;
+
+    grafo->floyd(idOrigem, idDestino);
 
     return grafo;
 }

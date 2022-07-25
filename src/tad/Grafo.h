@@ -44,6 +44,8 @@ class Grafo
         void retirarElementoLista(list<int> *listaDisponiveis, int verticeMenorCaminho);
         int extrairIdMenorCustoDisponivel(float *custos, list<int> *listaDisponiveis);
         bool inList(int id, list<int> *listaDisponiveis);
+
+        string floyd(int idInicial, int idFinal);
         
 };
 
