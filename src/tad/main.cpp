@@ -62,6 +62,32 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
 
 void menu(Grafo *grafo, string arquivoSaida)
 {
+    int escolha;
+    cout<<"MENU:"<<endl;
+    cout<<"[1] Fecho transitivo direto"<<endl;
+    cout<<"[2] Fecho transitivo indireto"<<endl;
+
+    cout<<"[0] Sair"<<endl;
+
+    cout<<"Digite o valor desejado: ";
+    cin>>escolha;
+    switch (escolha)
+    {
+    case 0:
+        cout<<"Au revoir!"<<endl;
+        exit(0);
+        break;
+    case 1:
+        cout<<"Escolha o ID para o fecho transitivo direto: ";
+        cin>>escolha;
+        grafo->fechoTransitivoDireto(escolha);
+        menu(grafo, "oi");
+        break;
+    
+    default:
+        break;
+    }
+    
 }
 
 int main(int argc, char const *argv[])
@@ -93,7 +119,7 @@ int main(int argc, char const *argv[])
 
             grafo = lerArquivo(arquivo, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
         }
-        grafo->fechoTransitivoDireto(3);
+        menu(grafo, "oi");
     }
     return 0;
 }
