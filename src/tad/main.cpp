@@ -40,7 +40,14 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
     cout << "Grafo de ordem " << ordem << " ultimo no: " << grafo->getUltimoNo()->getId() << " ordem: " << grafo->getOrdem() << endl;
     cout << "Total de Arestas: " << grafo->getTotalArestas();
 
-    grafo->djkstra();
+    
+    int idOrigem, idDestino;
+    cout << endl << "Id No1" << endl;
+    cin >> idOrigem;
+    cout << "Id no2" << endl;
+    cin >> idDestino;
+
+    grafo->floyd(idOrigem, idDestino);
 
     return grafo;
 }

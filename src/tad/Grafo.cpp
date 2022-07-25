@@ -2,6 +2,7 @@
 #include <queue>
 #include <cmath>
 #include <list>
+#include <string>
 #include "Grafo.h"
 
 using namespace std;
@@ -329,7 +330,7 @@ void Grafo::fechoTransitivoDireto(int id)
         }
     }
     cout <<" }"<< endl;
-
+}
 
 // Parâmetro: dois IDs de vértices do grafo; (1 ponto)
 // Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Djkstra;
@@ -534,4 +535,122 @@ bool Grafo::inList(int id, list<int> *listaDisponiveis)
     }
 
     return false;
+}
+
+string Grafo::floyd(int idInicial, int idFinal)
+{
+    float matriz[this->ordem][this->ordem];
+
+    No *noAtual, *noAlvo, *noInicial = this->procurarNo(idInicial), *noFinal = this->procurarNo(idFinal);
+    Aresta *arestaAtual;
+    int linha, coluna;
+    int idInicio = noInicial->getId();
+    int idFim = noFinal->getId();
+
+    list<int> caminho;
+    list<int>::iterator it;
+
+    if(!this->getPonderadoArestas())
+    {
+        cout << "O grafo precisa ser ponderado nas arestas!" << endl;
+        return "";
+    }
+
+    if(noInicial == nullptr || noFinal == nullptr)
+    {
+        cout << "Erro ao buscar o nó no grafo" << endl;
+        return "";
+    }
+
+    if(noInicial->getGrauSaida() < 1)
+    {
+        cout << "O nó selecionado possui grau de saída 0!" << endl;
+        return "";
+    }
+
+    for (linha = 0; linha < this->ordem; linha++)
+    {
+        noAtual = this->procurarNo(linha + 1);
+
+        for (coluna = 0; coluna < this->ordem; coluna++)
+        {
+            noAlvo = this->procurarNo(coluna + 1);
+
+            if(linha == coluna)
+            {
+                matriz[linha][coluna] = 0;
+            } else if(noAtual->procurarAresta(noAlvo->getId())) {
+                arestaAtual = noAtual->arestasEntre(noAlvo->getId());
+
+                if(arestaAtual->getPesoAresta() < 0)
+                {
+                    cout << "Erro: Aresta com peso negativo!" << endl;
+                    return "";
+                }
+
+                matriz[linha][coluna] = arestaAtual->getPesoAresta();
+
+                if(linha == idInicio - 1 && coluna == idFim - 1)
+                {
+                    caminho.push_front(idInicio);
+                    caminho.push_back(idFim);
+                }
+            } else {
+                matriz[linha][coluna] = INFINITY;
+            }
+
+        }
+        
+    }
+
+    for (int k = 0; k < this->ordem; k++)
+    {
+        for ( linha = 0; linha < this->ordem; linha++)
+        {
+            noAtual = this->procurarNo(linha + 1);
+
+            for (coluna = 0; coluna < this->ordem; coluna++)
+            {
+                noAlvo = this->procurarNo(coluna + 1);
+
+                if(linha != k && coluna != k && linha != coluna)
+                {
+                    if(matriz[linha][k] != INFINITY && matriz[k][coluna] != INFINITY)
+                    {
+                        if(matriz[linha][coluna] > matriz[linha][k] + matriz[k][coluna])
+                        {
+                            matriz[linha][coluna] = matriz[linha][k] + matriz[k][coluna];
+
+                            if(linha == idInicio - 1 && coluna == idFim - 1)
+                            {
+                                if(caminho.empty())
+                                {
+                                    caminho.push_front(k + 1);
+                                    caminho.push_back(idFim);
+                                } else {
+                                    it = caminho.end();
+                                    it--;
+                                    caminho.insert(it, k + 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+    }
+
+    string grafo;
+
+    if(!caminho.empty())
+    {
+        //Imprimir Caminho
+    } else {
+        cout << "Não foi possível encontrar um caminho entre os dois vertices!" << endl;
+        return "";
+    }
+    
+    return "";
 }
