@@ -2,6 +2,8 @@
 #define GRAFO_H_INCLUDED
 
 #include "No.h"
+#include <list>
+#include <string>
 
 using namespace std;
 
@@ -14,6 +16,7 @@ class Grafo
         No *ultimoNo;
         bool ponderadoArestas;
         bool ponderadoNos;
+        int totalArestas;
 
     public:
         Grafo(int ordem, bool direcionado, bool ponderadoArestas, bool ponderadoNos);
@@ -23,6 +26,7 @@ class Grafo
         bool getDirecionado();
         No* getPrimeiroNo();
         No* getUltimoNo();
+        int getTotalArestas();
         bool getPonderadoArestas();
         bool getPonderadoNos();
 
@@ -37,6 +41,13 @@ class Grafo
         void fechoTransitivoDireto(int );
         void fechoTransitivoIndireto(int );
         void caminhamentoProfundidade(No *);
+
+        std::string djkstra();
+        void retirarElementoLista(list<int> *listaDisponiveis, int verticeMenorCaminho);
+        int extrairIdMenorCustoDisponivel(float *custos, list<int> *listaDisponiveis);
+        bool inList(int id, list<int> *listaDisponiveis);
+
+        string floyd(int idInicial, int idFinal);
         
 };
 

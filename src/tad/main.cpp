@@ -12,6 +12,7 @@ IOS:
 será gravado o grafo armazenado na memória ao término do;
 
 */
+
 Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int temPesoNo)
 {
     int idNo;
@@ -33,14 +34,23 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
         while (arquivo >> idNo >> destinoNo)
         {
             grafo->inserirNo(idNo, 0);                  // 0 por enquanto
-            grafo->adicionarAresta(idNo, destinoNo, 0); // peso 0 para todas 
+            grafo->adicionarAresta(idNo, destinoNo, 0); // peso 0 para todas // se descomentar isso nao roda o codigo
         }
 
     cout << "Grafo de ordem " << ordem << " ultimo no: " << grafo->getUltimoNo()->getId() << " ordem: " << grafo->getOrdem() << endl;
+    cout << "Total de Arestas: " << grafo->getTotalArestas();
 
+    /*
+    int idOrigem, idDestino;
+    cout << endl << "Id No1" << endl;
+    cin >> idOrigem;
+    cout << "Id no2" << endl;
+    cin >> idDestino;
+
+    grafo->floyd(idOrigem, idDestino);
+    */
     return grafo;
 }
-
 void menu(Grafo *grafo, string arquivoSaida)
 {
     int escolha;

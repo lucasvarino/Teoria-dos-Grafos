@@ -1,5 +1,8 @@
 #include <iostream>
 #include <queue>
+#include <cmath>
+#include <list>
+#include <string>
 #include "Grafo.h"
 
 using namespace std;
@@ -12,6 +15,7 @@ Grafo::Grafo(int ordem, bool direcionado, bool ponderadoArestas, bool ponderadoV
     this->ponderadoNos = ponderadoVertices;
     this->primeiroNo = nullptr;
     this->ultimoNo = nullptr;
+    this->totalArestas = 0;
 }
 
 Grafo::~Grafo()
@@ -30,6 +34,11 @@ Grafo::~Grafo()
 int Grafo::getOrdem()
 {
     return this->ordem;
+}
+
+int Grafo::getTotalArestas()
+{
+    return this->totalArestas;
 }
 
 bool Grafo::getPonderadoArestas()
@@ -180,6 +189,7 @@ void Grafo::adicionarAresta(int idOrigem, int idDestino, float peso)
         if (!origem->procurarAresta(idDestino))
         {
             origem->adicionarAresta(idDestino, peso);
+            this->totalArestas++;
         }
     }
 }
@@ -345,4 +355,326 @@ void Grafo::fechoTransitivoIndireto(int id)
         }
     }
     cout << "]" << endl;
+}
+// Parâmetro: dois IDs de vértices do grafo; (1 ponto)
+// Saída: o caminho mínimo entre estes dois vértices usando algoritmo de Djkstra;
+
+string Grafo::djkstra()
+{
+    int idOrigem, idDestino;
+    No *noOrigem, *noDestino;
+
+    string idO, idD;
+
+    try
+    {
+        cout << "Nó de Origem: " << endl;
+        cin >> idO;
+        cout << "Nó de Destino: " << endl;
+        cin >> idD;
+
+        idOrigem = stoi(idO);
+        idDestino = stoi(idD);
+    }
+    catch(const std::exception& e)
+    {
+        cout << "Erro ao processar os parâmetros da função" << endl;
+        return 0;
+    }
+
+    if(idOrigem == idDestino)
+    {
+        cout << "\nA distância é: 0" << endl;
+        return 0;
+    }
+
+    noOrigem = this->procurarNo(idOrigem);
+    noDestino = this->procurarNo(idDestino);
+
+    if(noOrigem == nullptr || noDestino == nullptr)
+    {
+        cout << "Não foram encontrados nós com os ids escolhidos" << endl;
+        return 0;
+    }
+
+    No *noAtual = this->primeiroNo;
+
+    float custos[this->ordem], menorCustoCaminho = INFINITY, menorCustoCaminhoAux;
+
+    No *vPais[this->ordem];
+
+    list<int> listaDisponiveis;
+    Aresta *arestaAtual;
+
+    int idMenorCustoCaminho, idMenorCustoCaminhoAux;
+
+    while (noAtual != nullptr)
+    {
+        if(noAtual != noOrigem)
+        {
+            listaDisponiveis.push_back(noAtual->getId());
+        }
+
+        arestaAtual = noOrigem->arestasEntre(noAtual->getId());
+
+        if(arestaAtual != nullptr && arestaAtual->getPesoAresta() < 0)
+        {
+            cout << "Não é possível executar o algoritmo com arestas com peso negativo" << endl;
+            return "";
+        }
+
+        if(arestaAtual != nullptr)
+        {
+            vPais[noAtual->getId() - 1] = noOrigem;
+            custos[noAtual->getId() - 1] = arestaAtual->getPesoAresta();
+
+            if(arestaAtual->getPesoAresta() < menorCustoCaminho)
+            {
+                menorCustoCaminho = arestaAtual->getPesoAresta();
+                idMenorCustoCaminho = noAtual->getId();
+            }
+        } else {
+            custos[noAtual->getId() - 1] = INFINITY;
+            vPais[noAtual->getId() - 1] = nullptr;
+        }
+
+        noAtual = noAtual->getProxNo();
+    }
+
+    custos[noOrigem->getId() - 1] = 0;
+
+    noAtual = this->procurarNo(idMenorCustoCaminho);
+    retirarElementoLista(&listaDisponiveis, idMenorCustoCaminho);
+
+    bool atualizouAuxiliaresMenorCusto;
+
+    while (!listaDisponiveis.empty())
+    {
+        // Verificar grau de saída
+        
+        if(noAtual->getGrauSaida() < 1)
+        {
+            idMenorCustoCaminho = this->extrairIdMenorCustoDisponivel(custos, &listaDisponiveis);
+
+            if(idMenorCustoCaminho < 1)
+                break;
+
+            menorCustoCaminho = custos[idMenorCustoCaminho - 1];
+        } else {
+            atualizouAuxiliaresMenorCusto = false;
+            menorCustoCaminhoAux = INFINITY;
+            arestaAtual = noAtual->getPrimeiraAresta();
+
+            while (arestaAtual != nullptr)
+            {
+                if(arestaAtual->getPesoAresta() < 0)
+                {
+                    cout << "Erro: Aresta com peso negativo no Grafo!" << endl;
+                    return "";
+                }
+
+                noDestino = this->procurarNo(arestaAtual->getTargetId());
+
+                if(this->inList(noDestino->getId(), &listaDisponiveis))
+                {
+                    if(custos[noDestino->getId() - 1] > arestaAtual->getPesoAresta() + menorCustoCaminho)
+                    {
+                        custos[noDestino->getId() - 1] = arestaAtual->getPesoAresta() + menorCustoCaminho;
+                        vPais[noDestino->getId() - 1] = noAtual;
+
+                        if(custos[noDestino->getId() - 1] < menorCustoCaminhoAux)
+                        {
+                            menorCustoCaminhoAux = custos[noDestino->getId() - 1];
+                            idMenorCustoCaminhoAux = noDestino->getId();
+                            atualizouAuxiliaresMenorCusto = true;
+                        }
+                    }
+                }
+
+                arestaAtual = arestaAtual->getProx();
+            }
+
+            if(atualizouAuxiliaresMenorCusto)
+            {
+                menorCustoCaminho = menorCustoCaminhoAux;
+                idMenorCustoCaminho = idMenorCustoCaminhoAux;
+            } else {
+                idMenorCustoCaminho = this->extrairIdMenorCustoDisponivel(custos, &listaDisponiveis);
+                menorCustoCaminho = custos[idMenorCustoCaminho - 1];
+            }
+            
+        }
+
+        noAtual = this->procurarNo(idMenorCustoCaminho);
+        this->retirarElementoLista(&listaDisponiveis, idMenorCustoCaminho);
+
+    }
+
+    cout << "\n O caminho mínimo entre os vértices é: " << custos[noDestino->getId() - 1] << endl;
+
+    // Gerar o caminho mínimo
+
+    return "";
+    
+    
+}
+
+void Grafo::retirarElementoLista(list<int> *listaVerticesDisponiveis, int verticeMenorCaminhoAtual){
+    //percorre a lista de vertices disponiveis
+    for(auto it = listaVerticesDisponiveis->begin(); it!=listaVerticesDisponiveis->end();it++){
+        if(*it == verticeMenorCaminhoAtual)
+        {
+            listaVerticesDisponiveis->erase(it);
+            break;
+        }
+    }
+}
+
+int Grafo::extrairIdMenorCustoDisponivel(float *custos, list<int> *listaDisponiveis)
+{
+    int idMenorCusto = 0;
+    float menorCusto = INFINITY;
+
+    for (int i = 0; i < this->ordem; i++)
+    {
+        if(this->inList(i + 1, listaDisponiveis))
+        {
+            if(custos[i] < menorCusto)
+            {
+                menorCusto = custos[i];
+                idMenorCusto = i + 1;
+            }
+        }
+    }
+    
+    return idMenorCusto;
+}
+
+bool Grafo::inList(int id, list<int> *listaDisponiveis)
+{
+    for (auto item = listaDisponiveis->begin(); item != listaDisponiveis->end(); item++)
+    {
+        if(*item == id)
+            return true;
+    }
+
+    return false;
+}
+
+string Grafo::floyd(int idInicial, int idFinal)
+{
+    float matriz[this->ordem][this->ordem];
+
+    No *noAtual, *noAlvo, *noInicial = this->procurarNo(idInicial), *noFinal = this->procurarNo(idFinal);
+    Aresta *arestaAtual;
+    int linha, coluna;
+    int idInicio = noInicial->getId();
+    int idFim = noFinal->getId();
+
+    list<int> caminho;
+    list<int>::iterator it;
+
+    if(!this->getPonderadoArestas())
+    {
+        cout << "O grafo precisa ser ponderado nas arestas!" << endl;
+        return "";
+    }
+
+    if(noInicial == nullptr || noFinal == nullptr)
+    {
+        cout << "Erro ao buscar o nó no grafo" << endl;
+        return "";
+    }
+
+    if(noInicial->getGrauSaida() < 1)
+    {
+        cout << "O nó selecionado possui grau de saída 0!" << endl;
+        return "";
+    }
+
+    for (linha = 0; linha < this->ordem; linha++)
+    {
+        noAtual = this->procurarNo(linha + 1);
+
+        for (coluna = 0; coluna < this->ordem; coluna++)
+        {
+            noAlvo = this->procurarNo(coluna + 1);
+
+            if(linha == coluna)
+            {
+                matriz[linha][coluna] = 0;
+            } else if(noAtual->procurarAresta(noAlvo->getId())) {
+                arestaAtual = noAtual->arestasEntre(noAlvo->getId());
+
+                if(arestaAtual->getPesoAresta() < 0)
+                {
+                    cout << "Erro: Aresta com peso negativo!" << endl;
+                    return "";
+                }
+
+                matriz[linha][coluna] = arestaAtual->getPesoAresta();
+
+                if(linha == idInicio - 1 && coluna == idFim - 1)
+                {
+                    caminho.push_front(idInicio);
+                    caminho.push_back(idFim);
+                }
+            } else {
+                matriz[linha][coluna] = INFINITY;
+            }
+
+        }
+        
+    }
+
+    for (int k = 0; k < this->ordem; k++)
+    {
+        for ( linha = 0; linha < this->ordem; linha++)
+        {
+            noAtual = this->procurarNo(linha + 1);
+
+            for (coluna = 0; coluna < this->ordem; coluna++)
+            {
+                noAlvo = this->procurarNo(coluna + 1);
+
+                if(linha != k && coluna != k && linha != coluna)
+                {
+                    if(matriz[linha][k] != INFINITY && matriz[k][coluna] != INFINITY)
+                    {
+                        if(matriz[linha][coluna] > matriz[linha][k] + matriz[k][coluna])
+                        {
+                            matriz[linha][coluna] = matriz[linha][k] + matriz[k][coluna];
+
+                            if(linha == idInicio - 1 && coluna == idFim - 1)
+                            {
+                                if(caminho.empty())
+                                {
+                                    caminho.push_front(k + 1);
+                                    caminho.push_back(idFim);
+                                } else {
+                                    it = caminho.end();
+                                    it--;
+                                    caminho.insert(it, k + 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            
+        }
+        
+    }
+
+    string grafo;
+
+    if(!caminho.empty())
+    {
+        //Imprimir Caminho
+    } else {
+        cout << "Não foi possível encontrar um caminho entre os dois vertices!" << endl;
+        return "";
+    }
+    
+    return "";
 }
