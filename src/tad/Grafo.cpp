@@ -300,3 +300,31 @@ void Grafo::caminhamentoLargura(int id) // Verificar se está certo
     
 }
 
+
+void Grafo::caminhamentoProfundidade(No *no){
+    no->setMarcado(true);
+    for(Aresta *aux = no->getPrimeiraAresta(); aux != nullptr; aux = aux->getProx()){
+        if(!this->procurarNo(aux->getTargetId())->getMarcado())
+            caminhamentoProfundidade(this->procurarNo(aux->getTargetId()));
+    }
+}
+
+// Fecho transitivo direto grafo direcionado 
+
+void Grafo::fechoTransitivoDireto(int id){
+    No *no = this->procurarNo(id);
+    if(no == nullptr)
+        cout<<"ID inexistente!!"<<endl;
+    else{
+        this->caminhamentoProfundidade(no);
+        for(no = this->primeiroNo; no != nullptr; no = no->getProxNo()){
+            Aresta *aresta = no->getPrimeiraAresta();
+
+            if(no->getMarcado()){
+                cout<< no->getId() << " / ";
+            }
+            
+        }
+    }
+}
+
