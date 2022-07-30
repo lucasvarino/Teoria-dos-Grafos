@@ -40,9 +40,10 @@ class Grafo
 
         void caminhamentoLargura(int id);
         void fechoTransitivoDireto(int );
+        void fechoTransitivoIndireto(int );
         void caminhamentoProfundidade(No *);
 
-        string djkstra();
+        std::string djkstra();
         void retirarElementoLista(list<int> *listaDisponiveis, int verticeMenorCaminho);
         int extrairIdMenorCustoDisponivel(float *custos, list<int> *listaDisponiveis);
         bool inList(int id, list<int> *listaDisponiveis);

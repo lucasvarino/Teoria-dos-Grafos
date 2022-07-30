@@ -58,7 +58,6 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
 
     return grafo;
 }
-
 void menu(Grafo *grafo, string arquivoSaida)
 {
     int escolha;
@@ -80,6 +79,12 @@ void menu(Grafo *grafo, string arquivoSaida)
         cout<<"Escolha o ID para o fecho transitivo direto: ";
         cin>>escolha;
         grafo->fechoTransitivoDireto(escolha);
+        menu(grafo, "oi");
+        break;
+    case 2:
+        cout<<"Escolha o ID para o fecho transitivo indireto: ";
+        cin>>escolha;
+        grafo->fechoTransitivoIndireto(escolha);
         menu(grafo, "oi");
         break;
     
