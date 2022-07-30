@@ -95,7 +95,12 @@ void menu(Grafo *grafo, string arquivoSaida)
         grafo->agrupamentoLocal(escolha);
         menu(grafo, "oi");
         break;
-
+    case 4:
+        cout << "Calculando coeficiente medio..." << endl;
+        grafo->agrupamentoMedio();
+        menu(grafo, "oi");
+        break;
+    
     default:
         break;
     }
