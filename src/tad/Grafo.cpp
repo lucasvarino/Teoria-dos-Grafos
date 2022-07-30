@@ -916,6 +916,6 @@ void Grafo::agrupamentoMedio()
 
     coeficiente = somaDosAgrupamentos / this->ordem;
 
-    cout << "Coeficiente de agrupamento medio: " << coeficiente << endl;
+    cout << "Coeficiente de agrupamento medio do Grafo: " << coeficiente << endl;
     
 }
