@@ -24,7 +24,7 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
     Grafo *grafo = new Grafo(ordem, isDirecionado, temPesoAresta, temPesoNo);
 
     // leitura -> com peso nas arestas e com peso nos vertices
-    if (grafo->getPonderadoArestas() && grafo->getPonderadoNos())
+    if (grafo->getPonderadoArestas())
         while (arquivo >> idNo >> destinoNo >> pesoAresta)
         {
             grafo->inserirNo(idNo, 0); // 0 por enquanto
@@ -40,15 +40,22 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
     cout << "Grafo de ordem " << ordem << " ultimo no: " << grafo->getUltimoNo()->getId() << " ordem: " << grafo->getOrdem() << endl;
     cout << "Total de Arestas: " << grafo->getTotalArestas();
 
-    /*
-    int idOrigem, idDestino;
-    cout << endl << "Id No1" << endl;
-    cin >> idOrigem;
-    cout << "Id no2" << endl;
-    cin >> idDestino;
+    //Precisamos disso para rodar a AGM por PRIM
+    
+    string retorno;
 
-    grafo->floyd(idOrigem, idDestino);
-    */
+    cout<<"Digite a ordem do subgrafo de entrada: ";
+            int tamanho;
+            cin >> tamanho;
+            int vertices[tamanho];
+            for(int i=0; i<tamanho; i++){
+                cout << "Digite o " << std::to_string(i+1) << "o vertice: ";
+                cin >> vertices[i];
+                cout << endl;
+            }
+            Grafo* subGrafo = grafo->subgrafo(vertices, tamanho);
+            retorno = subGrafo->arvoreGeradoraMinimaPrim();
+
     return grafo;
 }
 void menu(Grafo *grafo, string arquivoSaida)
