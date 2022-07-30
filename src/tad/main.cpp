@@ -42,19 +42,19 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
 
     //Precisamos disso para rodar a AGM por PRIM
     
-    string retorno;
+    // string retorno;
 
-    cout<<"Digite a ordem do subgrafo de entrada: ";
-            int tamanho;
-            cin >> tamanho;
-            int vertices[tamanho];
-            for(int i=0; i<tamanho; i++){
-                cout << "Digite o " << std::to_string(i+1) << "o vertice: ";
-                cin >> vertices[i];
-                cout << endl;
-            }
-            Grafo* subGrafo = grafo->subgrafo(vertices, tamanho);
-            retorno = subGrafo->arvoreGeradoraMinimaPrim();
+    // cout<<"Digite a ordem do subgrafo de entrada: ";
+    //         int tamanho;
+    //         cin >> tamanho;
+    //         int vertices[tamanho];
+    //         for(int i=0; i<tamanho; i++){
+    //             cout << "Digite o " << std::to_string(i+1) << "o vertice: ";
+    //             cin >> vertices[i];
+    //             cout << endl;
+    //         }
+    //         Grafo* subGrafo = grafo->subgrafo(vertices, tamanho);
+    //         retorno = subGrafo->arvoreGeradoraMinimaPrim();
 
     return grafo;
 }
@@ -64,6 +64,8 @@ void menu(Grafo *grafo, string arquivoSaida)
     cout<<"MENU:"<<endl;
     cout<<"[1] Fecho transitivo direto"<<endl;
     cout<<"[2] Fecho transitivo indireto"<<endl;
+    cout<<"[3] Agrupamento Local"<<endl;
+    cout<<"[4] Agrupamento Medio"<<endl;
 
     cout<<"[0] Sair"<<endl;
 
@@ -87,7 +89,13 @@ void menu(Grafo *grafo, string arquivoSaida)
         grafo->fechoTransitivoIndireto(escolha);
         menu(grafo, "oi");
         break;
-    
+    case 3:
+        cout << "Escolha o ID para achar seu agrupamento local: ";
+        cin >> escolha;
+        grafo->agrupamentoLocal(escolha);
+        menu(grafo, "oi");
+        break;
+
     default:
         break;
     }
