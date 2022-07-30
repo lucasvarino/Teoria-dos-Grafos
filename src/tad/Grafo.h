@@ -55,6 +55,8 @@ class Grafo
         Grafo* subgrafo(int vertices[], int tamanho);
         bool existeNoPorIdAux(int id);
         bool auxBuscaVetor(int vertices[], int tamanho, int id_aux);
+
+        float agrupamentoLocal(int id);
 };
 
 

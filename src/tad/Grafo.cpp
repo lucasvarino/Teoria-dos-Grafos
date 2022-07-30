@@ -836,3 +836,66 @@ bool Grafo::auxBuscaVetor(int vertices[], int tamanho, int id_aux) {
     }
     return false;
 }
+
+float Grafo::agrupamentoLocal(int id)
+{
+    int grau = 0;
+    float coeficiente;
+
+    No *no = this->procurarNo(id);
+
+    if(no == nullptr)
+    {
+        cout << "Id inválido para achar seu agrupamento local!" << endl;
+        return -1;
+    }
+
+    No *aux = nullptr;
+    int size = 0;
+    Aresta *aresta = no->getPrimeiraAresta();
+
+    vector<int> adjacente;
+    float par = 0;
+
+    while (aresta != nullptr)
+    {
+        grau++;
+        adjacente.push_back(aresta->getOriginId());
+
+        aresta = aresta->getProx();
+    }
+
+    for (int i = 0; i < adjacente.size(); i++)
+    {
+        aux = this->procurarNo(adjacente[i]);
+        for (aresta = no->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProx())
+        {
+            size = adjacente.size();
+            for (int j = 0; j < size; j++)
+            {
+                if(aresta->getOriginId() == adjacente[j])
+                    par++;
+            }
+            
+        }
+        
+    }
+
+    int arestasCompletas = (grau * (grau - 1)) / 2;
+
+    if(!this->direcionado)
+        par = par / 2;
+    else
+        arestasCompletas = arestasCompletas / 2;
+    
+
+    coeficiente = par / arestasCompletas;
+
+    if(par == 0)
+        coeficiente = 0;
+
+    cout << "O coeficiente de agrupamento local é: " << coeficiente << endl;
+    return coeficiente;
+    
+    
+}
