@@ -899,3 +899,23 @@ float Grafo::agrupamentoLocal(int id)
     
     
 }
+
+void Grafo::agrupamentoMedio()
+{
+    float somaDosAgrupamentos = 0;
+    float coeficiente;
+    
+    No *no = this->primeiroNo;
+
+    while (no != nullptr)
+    {
+        somaDosAgrupamentos += this->agrupamentoLocal(no->getId());
+
+        no = no->getProxNo();
+    }
+
+    coeficiente = somaDosAgrupamentos / this->ordem;
+
+    cout << "Coeficiente de agrupamento medio: " << coeficiente << endl;
+    
+}

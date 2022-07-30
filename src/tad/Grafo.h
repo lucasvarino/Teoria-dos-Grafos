@@ -57,6 +57,7 @@ class Grafo
         bool auxBuscaVetor(int vertices[], int tamanho, int id_aux);
 
         float agrupamentoLocal(int id);
+        void agrupamentoMedio();
 };
 
 
