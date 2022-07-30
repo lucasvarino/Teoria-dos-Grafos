@@ -3,6 +3,8 @@
 
 #include "No.h"
 #include <list>
+#include <vector>
+#include <string>
 
 using namespace std;
 
@@ -46,7 +48,12 @@ class Grafo
         bool inList(int id, list<int> *listaDisponiveis);
 
         string floyd(int idInicial, int idFinal);
-        
+
+        string arvoreGeradoraMinimaPrim();  
+        int distMinima(bool visitados[], float dist[]);
+        Grafo* subgrafo(int vertices[], int tamanho);
+        bool existeNoPorIdAux(int id);
+        bool auxBuscaVetor(int vertices[], int tamanho, int id_aux);
 };
 
 

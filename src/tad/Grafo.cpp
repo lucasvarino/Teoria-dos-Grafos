@@ -3,6 +3,7 @@
 #include <cmath>
 #include <list>
 #include <string>
+#include <limits>
 #include "Grafo.h"
 
 using namespace std;
@@ -653,4 +654,161 @@ string Grafo::floyd(int idInicial, int idFinal)
     }
     
     return "";
+}
+
+
+string Grafo::arvoreGeradoraMinimaPrim()
+{
+    string retorno = "AGM por Prim";
+
+    if(this->direcionado) {
+        retorno += "Erro: Grafo direcionado!";
+        return retorno;
+    }
+
+    bool visitados[this->ordem];
+    float distancia[this->ordem];
+    int caminho[this->ordem];
+    float infinito = INFINITY;
+    float menorPeso = infinito;
+    Aresta* menorAresta;
+
+
+
+    for (No *no = this->getPrimeiroNo(); no != nullptr; no = no->getProxNo())
+    {
+        for (Aresta *aresta = no->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProx())
+        {
+            if(aresta->getPesoAresta() <= menorPeso)
+            {
+                menorPeso = aresta->getPesoAresta();
+                menorAresta = aresta;
+            }
+        }
+        
+    }
+
+    int idOrigem = menorAresta->getOriginId();
+
+    for (int i = 0; i < this->ordem; i++)
+    {
+        visitados[i] = false;
+        distancia[i] = infinito;
+        caminho[i] = -1;
+    }
+
+    distancia[idOrigem] = 0;
+
+    for (int i = 0; i < this->ordem; i++)
+    {
+        int u = this->distMinima(visitados, distancia);
+        visitados[u] = true;
+        No *noAux = this->procurarNo(u); // Ta vindo null aq
+
+        for (Aresta *adjacente = noAux->getPrimeiraAresta(); adjacente != nullptr ; adjacente = adjacente->getProx())
+        {
+            if(!visitados[adjacente->getTargetId()] && adjacente->getPesoAresta() < distancia[adjacente->getTargetId()])
+            {
+                distancia[adjacente->getTargetId()] = adjacente->getPesoAresta();
+                caminho[adjacente->getTargetId()] = u;
+            }
+        }
+        
+    }
+    
+    string seta = " -- ";
+    retorno += "strict graph { \n";
+
+    for (int i = 0; i < this->ordem; i++)
+    {
+        if(caminho[i] != -1)
+            retorno += "\t" + std::to_string(this->procurarNo(i)->getId()) + seta + std::to_string(this->procurarNo(caminho[i])->getId()) + "\n";
+        else if(caminho[i] == -1 && i != idOrigem)
+            retorno += "\t" + std::to_string(this->procurarNo(i)->getId()) + "\n";
+    }
+
+    retorno += "} \n";
+    retorno += "---------------------------------------";
+    return retorno;
+    
+    
+}
+
+int Grafo::distMinima(bool visitados[], float dist[]) {
+    // Variavel de valor minimo, inicializada como + infinito
+    float min = std::numeric_limits<float>::max();
+    // Variavel para gravar o id do menor vertice
+    int idMenor;
+    // Laco que percorre o grafo
+    for(int i=0; i<this->ordem; i++){
+        // Caso o vertice não tenha sido visitado e tenha distancia menor que a variavel 'min', o mesmo passa a ser o menor
+        if(visitados[i]==false && dist[i]<=min){
+            min = dist[i];
+            idMenor = i;
+        }
+    }
+    // Retorna o vertice de menor valor de distancia
+    return idMenor;
+}
+
+Grafo* Grafo::subgrafo(int vertices[], int tamanho)
+{
+    Grafo* subgrafo = new Grafo(tamanho, this->direcionado, this->ponderadoArestas, this->ponderadoNos);
+
+    for (int i = 0; i < tamanho; i++)
+    {
+        if(!this->existeNoPorIdAux(vertices[i]))
+        {
+            cout << "Não existe esse vértice no grafo!" << endl;
+            return subgrafo;
+        }
+    }
+
+    for (No *no = this->primeiroNo; no != nullptr ; no = no->getProxNo())
+    {
+        if(this->auxBuscaVetor(vertices, tamanho, no->getId()))
+        {
+            if(!subgrafo->existeNoPorIdAux(no->getId()))
+            {
+                subgrafo->inserirNo(no->getId());
+            }
+
+            for (Aresta *aresta = no->getPrimeiraAresta(); aresta != nullptr ; aresta = aresta->getProx())
+            {
+                if(this->auxBuscaVetor(vertices, tamanho, aresta->getTargetId()))
+                {
+                    subgrafo->adicionarAresta(aresta->getOriginId(), aresta->getTargetId(), aresta->getPesoAresta());
+                }
+            }
+            
+        }
+    }
+    
+    return subgrafo;
+    
+}
+
+bool Grafo::existeNoPorIdAux(int id_aux) {
+    // Veririca se tem No nesse grafo
+    if(this->primeiroNo != nullptr) {
+        // Percorre os Nos do grafo
+        for (No* no = this->primeiroNo; no != nullptr ; no = no->getProxNo()) {
+            // Se encontrar o No pelo Id Aux, retorna verdadeiro
+            if(no->getId() == id_aux) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Grafo::auxBuscaVetor(int vertices[], int tamanho, int id_aux) {
+    // Percorre o vetor
+    for(int i = 0; i < tamanho; i++) {
+        // Se encontrar, retorna true
+        if(vertices[i] == id_aux) {
+            return true;
+        }
+    }
+    return false;
 }
