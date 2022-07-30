@@ -888,13 +888,13 @@ float Grafo::agrupamentoLocal(int id)
     else
         arestasCompletas = arestasCompletas / 2;
     
-
+ 
     coeficiente = par / arestasCompletas;
 
-    if(par == 0)
+    if(par == 0 || arestasCompletas == 0)
         coeficiente = 0;
 
-    cout << "O coeficiente de agrupamento local é: " << coeficiente << endl;
+    cout << "O coeficiente de agrupamento local do vertice " << id << " é: " << coeficiente << endl;
     return coeficiente;
     
     

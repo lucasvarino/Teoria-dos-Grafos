@@ -65,6 +65,7 @@ void menu(Grafo *grafo, string arquivoSaida)
     cout<<"[1] Fecho transitivo direto"<<endl;
     cout<<"[2] Fecho transitivo indireto"<<endl;
     cout<<"[3] Agrupamento Local"<<endl;
+    cout<<"[4] Agrupamento Medio"<<endl;
 
     cout<<"[0] Sair"<<endl;
 
