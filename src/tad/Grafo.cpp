@@ -377,13 +377,13 @@ string Grafo::djkstra()
         idOrigem = stoi(idO);
         idDestino = stoi(idD);
     }
-    catch(const std::exception& e)
+    catch (const std::exception &e)
     {
         cout << "Erro ao processar os parâmetros da função" << endl;
         return 0;
     }
 
-    if(idOrigem == idDestino)
+    if (idOrigem == idDestino)
     {
         cout << "\nA distância é: 0" << endl;
         return 0;
@@ -392,7 +392,7 @@ string Grafo::djkstra()
     noOrigem = this->procurarNo(idOrigem);
     noDestino = this->procurarNo(idDestino);
 
-    if(noOrigem == nullptr || noDestino == nullptr)
+    if (noOrigem == nullptr || noDestino == nullptr)
     {
         cout << "Não foram encontrados nós com os ids escolhidos" << endl;
         return 0;
@@ -411,30 +411,32 @@ string Grafo::djkstra()
 
     while (noAtual != nullptr)
     {
-        if(noAtual != noOrigem)
+        if (noAtual != noOrigem)
         {
             listaDisponiveis.push_back(noAtual->getId());
         }
 
         arestaAtual = noOrigem->arestasEntre(noAtual->getId());
 
-        if(arestaAtual != nullptr && arestaAtual->getPesoAresta() < 0)
+        if (arestaAtual != nullptr && arestaAtual->getPesoAresta() < 0)
         {
             cout << "Não é possível executar o algoritmo com arestas com peso negativo" << endl;
             return "";
         }
 
-        if(arestaAtual != nullptr)
+        if (arestaAtual != nullptr)
         {
             vPais[noAtual->getId() - 1] = noOrigem;
             custos[noAtual->getId() - 1] = arestaAtual->getPesoAresta();
 
-            if(arestaAtual->getPesoAresta() < menorCustoCaminho)
+            if (arestaAtual->getPesoAresta() < menorCustoCaminho)
             {
                 menorCustoCaminho = arestaAtual->getPesoAresta();
                 idMenorCustoCaminho = noAtual->getId();
             }
-        } else {
+        }
+        else
+        {
             custos[noAtual->getId() - 1] = INFINITY;
             vPais[noAtual->getId() - 1] = nullptr;
         }
@@ -452,23 +454,25 @@ string Grafo::djkstra()
     while (!listaDisponiveis.empty())
     {
         // Verificar grau de saída
-        
-        if(noAtual->getGrauSaida() < 1)
+
+        if (noAtual->getGrauSaida() < 1)
         {
             idMenorCustoCaminho = this->extrairIdMenorCustoDisponivel(custos, &listaDisponiveis);
 
-            if(idMenorCustoCaminho < 1)
+            if (idMenorCustoCaminho < 1)
                 break;
 
             menorCustoCaminho = custos[idMenorCustoCaminho - 1];
-        } else {
+        }
+        else
+        {
             atualizouAuxiliaresMenorCusto = false;
             menorCustoCaminhoAux = INFINITY;
             arestaAtual = noAtual->getPrimeiraAresta();
 
             while (arestaAtual != nullptr)
             {
-                if(arestaAtual->getPesoAresta() < 0)
+                if (arestaAtual->getPesoAresta() < 0)
                 {
                     cout << "Erro: Aresta com peso negativo no Grafo!" << endl;
                     return "";
@@ -476,14 +480,14 @@ string Grafo::djkstra()
 
                 noDestino = this->procurarNo(arestaAtual->getTargetId());
 
-                if(this->inList(noDestino->getId(), &listaDisponiveis))
+                if (this->inList(noDestino->getId(), &listaDisponiveis))
                 {
-                    if(custos[noDestino->getId() - 1] > arestaAtual->getPesoAresta() + menorCustoCaminho)
+                    if (custos[noDestino->getId() - 1] > arestaAtual->getPesoAresta() + menorCustoCaminho)
                     {
                         custos[noDestino->getId() - 1] = arestaAtual->getPesoAresta() + menorCustoCaminho;
                         vPais[noDestino->getId() - 1] = noAtual;
 
-                        if(custos[noDestino->getId() - 1] < menorCustoCaminhoAux)
+                        if (custos[noDestino->getId() - 1] < menorCustoCaminhoAux)
                         {
                             menorCustoCaminhoAux = custos[noDestino->getId() - 1];
                             idMenorCustoCaminhoAux = noDestino->getId();
@@ -495,20 +499,20 @@ string Grafo::djkstra()
                 arestaAtual = arestaAtual->getProx();
             }
 
-            if(atualizouAuxiliaresMenorCusto)
+            if (atualizouAuxiliaresMenorCusto)
             {
                 menorCustoCaminho = menorCustoCaminhoAux;
                 idMenorCustoCaminho = idMenorCustoCaminhoAux;
-            } else {
+            }
+            else
+            {
                 idMenorCustoCaminho = this->extrairIdMenorCustoDisponivel(custos, &listaDisponiveis);
                 menorCustoCaminho = custos[idMenorCustoCaminho - 1];
             }
-            
         }
 
         noAtual = this->procurarNo(idMenorCustoCaminho);
         this->retirarElementoLista(&listaDisponiveis, idMenorCustoCaminho);
-
     }
 
     cout << "\n O caminho mínimo entre os vértices é: " << custos[noDestino->getId() - 1] << endl;
@@ -516,14 +520,14 @@ string Grafo::djkstra()
     // Gerar o caminho mínimo
 
     return "";
-    
-    
 }
 
-void Grafo::retirarElementoLista(list<int> *listaVerticesDisponiveis, int verticeMenorCaminhoAtual){
-    //percorre a lista de vertices disponiveis
-    for(auto it = listaVerticesDisponiveis->begin(); it!=listaVerticesDisponiveis->end();it++){
-        if(*it == verticeMenorCaminhoAtual)
+void Grafo::retirarElementoLista(list<int> *listaVerticesDisponiveis, int verticeMenorCaminhoAtual)
+{
+    // percorre a lista de vertices disponiveis
+    for (auto it = listaVerticesDisponiveis->begin(); it != listaVerticesDisponiveis->end(); it++)
+    {
+        if (*it == verticeMenorCaminhoAtual)
         {
             listaVerticesDisponiveis->erase(it);
             break;
@@ -538,16 +542,16 @@ int Grafo::extrairIdMenorCustoDisponivel(float *custos, list<int> *listaDisponiv
 
     for (int i = 0; i < this->ordem; i++)
     {
-        if(this->inList(i + 1, listaDisponiveis))
+        if (this->inList(i + 1, listaDisponiveis))
         {
-            if(custos[i] < menorCusto)
+            if (custos[i] < menorCusto)
             {
                 menorCusto = custos[i];
                 idMenorCusto = i + 1;
             }
         }
     }
-    
+
     return idMenorCusto;
 }
 
@@ -555,7 +559,7 @@ bool Grafo::inList(int id, list<int> *listaDisponiveis)
 {
     for (auto item = listaDisponiveis->begin(); item != listaDisponiveis->end(); item++)
     {
-        if(*item == id)
+        if (*item == id)
             return true;
     }
 
@@ -575,19 +579,19 @@ string Grafo::floyd(int idInicial, int idFinal)
     list<int> caminho;
     list<int>::iterator it;
 
-    if(!this->getPonderadoArestas())
+    if (!this->getPonderadoArestas())
     {
         cout << "O grafo precisa ser ponderado nas arestas!" << endl;
         return "";
     }
 
-    if(noInicial == nullptr || noFinal == nullptr)
+    if (noInicial == nullptr || noFinal == nullptr)
     {
         cout << "Erro ao buscar o nó no grafo" << endl;
         return "";
     }
 
-    if(noInicial->getGrauSaida() < 1)
+    if (noInicial->getGrauSaida() < 1)
     {
         cout << "O nó selecionado possui grau de saída 0!" << endl;
         return "";
@@ -601,13 +605,15 @@ string Grafo::floyd(int idInicial, int idFinal)
         {
             noAlvo = this->procurarNo(coluna + 1);
 
-            if(linha == coluna)
+            if (linha == coluna)
             {
                 matriz[linha][coluna] = 0;
-            } else if(noAtual->procurarAresta(noAlvo->getId())) {
+            }
+            else if (noAtual->procurarAresta(noAlvo->getId()))
+            {
                 arestaAtual = noAtual->arestasEntre(noAlvo->getId());
 
-                if(arestaAtual->getPesoAresta() < 0)
+                if (arestaAtual->getPesoAresta() < 0)
                 {
                     cout << "Erro: Aresta com peso negativo!" << endl;
                     return "";
@@ -615,22 +621,22 @@ string Grafo::floyd(int idInicial, int idFinal)
 
                 matriz[linha][coluna] = arestaAtual->getPesoAresta();
 
-                if(linha == idInicio - 1 && coluna == idFim - 1)
+                if (linha == idInicio - 1 && coluna == idFim - 1)
                 {
                     caminho.push_front(idInicio);
                     caminho.push_back(idFim);
                 }
-            } else {
+            }
+            else
+            {
                 matriz[linha][coluna] = INFINITY;
             }
-
         }
-        
     }
 
     for (int k = 0; k < this->ordem; k++)
     {
-        for ( linha = 0; linha < this->ordem; linha++)
+        for (linha = 0; linha < this->ordem; linha++)
         {
             noAtual = this->procurarNo(linha + 1);
 
@@ -638,21 +644,23 @@ string Grafo::floyd(int idInicial, int idFinal)
             {
                 noAlvo = this->procurarNo(coluna + 1);
 
-                if(linha != k && coluna != k && linha != coluna)
+                if (linha != k && coluna != k && linha != coluna)
                 {
-                    if(matriz[linha][k] != INFINITY && matriz[k][coluna] != INFINITY)
+                    if (matriz[linha][k] != INFINITY && matriz[k][coluna] != INFINITY)
                     {
-                        if(matriz[linha][coluna] > matriz[linha][k] + matriz[k][coluna])
+                        if (matriz[linha][coluna] > matriz[linha][k] + matriz[k][coluna])
                         {
                             matriz[linha][coluna] = matriz[linha][k] + matriz[k][coluna];
 
-                            if(linha == idInicio - 1 && coluna == idFim - 1)
+                            if (linha == idInicio - 1 && coluna == idFim - 1)
                             {
-                                if(caminho.empty())
+                                if (caminho.empty())
                                 {
                                     caminho.push_front(k + 1);
                                     caminho.push_back(idFim);
-                                } else {
+                                }
+                                else
+                                {
                                     it = caminho.end();
                                     it--;
                                     caminho.insert(it, k + 1);
@@ -662,30 +670,30 @@ string Grafo::floyd(int idInicial, int idFinal)
                     }
                 }
             }
-            
         }
-        
     }
 
     string grafo;
 
-    if(!caminho.empty())
+    if (!caminho.empty())
     {
-        //Imprimir Caminho
-    } else {
+        // Imprimir Caminho
+    }
+    else
+    {
         cout << "Não foi possível encontrar um caminho entre os dois vertices!" << endl;
         return "";
     }
-    
+
     return "";
 }
-
 
 string Grafo::arvoreGeradoraMinimaPrim()
 {
     string retorno = "AGM por Prim";
 
-    if(this->direcionado) {
+    if (this->direcionado)
+    {
         retorno += "Erro: Grafo direcionado!";
         return retorno;
     }
@@ -695,21 +703,18 @@ string Grafo::arvoreGeradoraMinimaPrim()
     int caminho[this->ordem];
     float infinito = INFINITY;
     float menorPeso = infinito;
-    Aresta* menorAresta;
-
-
+    Aresta *menorAresta;
 
     for (No *no = this->getPrimeiroNo(); no != nullptr; no = no->getProxNo())
     {
         for (Aresta *aresta = no->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProx())
         {
-            if(aresta->getPesoAresta() <= menorPeso)
+            if (aresta->getPesoAresta() <= menorPeso)
             {
                 menorPeso = aresta->getPesoAresta();
                 menorAresta = aresta;
             }
         }
-        
     }
 
     int idOrigem = menorAresta->getOriginId();
@@ -729,44 +734,44 @@ string Grafo::arvoreGeradoraMinimaPrim()
         visitados[u] = true;
         No *noAux = this->procurarNo(u); // Ta vindo null aq
 
-        for (Aresta *adjacente = noAux->getPrimeiraAresta(); adjacente != nullptr ; adjacente = adjacente->getProx())
+        for (Aresta *adjacente = noAux->getPrimeiraAresta(); adjacente != nullptr; adjacente = adjacente->getProx())
         {
-            if(!visitados[adjacente->getTargetId()] && adjacente->getPesoAresta() < distancia[adjacente->getTargetId()])
+            if (!visitados[adjacente->getTargetId()] && adjacente->getPesoAresta() < distancia[adjacente->getTargetId()])
             {
                 distancia[adjacente->getTargetId()] = adjacente->getPesoAresta();
                 caminho[adjacente->getTargetId()] = u;
             }
         }
-        
     }
-    
+
     string seta = " -- ";
     retorno += "strict graph { \n";
 
     for (int i = 0; i < this->ordem; i++)
     {
-        if(caminho[i] != -1)
+        if (caminho[i] != -1)
             retorno += "\t" + std::to_string(this->procurarNo(i)->getId()) + seta + std::to_string(this->procurarNo(caminho[i])->getId()) + "\n";
-        else if(caminho[i] == -1 && i != idOrigem)
+        else if (caminho[i] == -1 && i != idOrigem)
             retorno += "\t" + std::to_string(this->procurarNo(i)->getId()) + "\n";
     }
 
     retorno += "} \n";
     retorno += "---------------------------------------";
     return retorno;
-    
-    
 }
 
-int Grafo::distMinima(bool visitados[], float dist[]) {
+int Grafo::distMinima(bool visitados[], float dist[])
+{
     // Variavel de valor minimo, inicializada como + infinito
     float min = std::numeric_limits<float>::max();
     // Variavel para gravar o id do menor vertice
     int idMenor;
     // Laco que percorre o grafo
-    for(int i=0; i<this->ordem; i++){
+    for (int i = 0; i < this->ordem; i++)
+    {
         // Caso o vertice não tenha sido visitado e tenha distancia menor que a variavel 'min', o mesmo passa a ser o menor
-        if(visitados[i]==false && dist[i]<=min){
+        if (visitados[i] == false && dist[i] <= min)
+        {
             min = dist[i];
             idMenor = i;
         }
@@ -775,50 +780,52 @@ int Grafo::distMinima(bool visitados[], float dist[]) {
     return idMenor;
 }
 
-Grafo* Grafo::subgrafo(int vertices[], int tamanho)
+Grafo *Grafo::subgrafo(int vertices[], int tamanho)
 {
-    Grafo* subgrafo = new Grafo(tamanho, this->direcionado, this->ponderadoArestas, this->ponderadoNos);
+    Grafo *subgrafo = new Grafo(tamanho, this->direcionado, this->ponderadoArestas, this->ponderadoNos);
 
     for (int i = 0; i < tamanho; i++)
     {
-        if(!this->existeNoPorIdAux(vertices[i]))
+        if (!this->existeNoPorIdAux(vertices[i]))
         {
             cout << "Não existe esse vértice no grafo!" << endl;
             return subgrafo;
         }
     }
 
-    for (No *no = this->primeiroNo; no != nullptr ; no = no->getProxNo())
+    for (No *no = this->primeiroNo; no != nullptr; no = no->getProxNo())
     {
-        if(this->auxBuscaVetor(vertices, tamanho, no->getId()))
+        if (this->auxBuscaVetor(vertices, tamanho, no->getId()))
         {
-            if(!subgrafo->existeNoPorIdAux(no->getId()))
+            if (!subgrafo->existeNoPorIdAux(no->getId()))
             {
                 subgrafo->inserirNo(no->getId());
             }
 
-            for (Aresta *aresta = no->getPrimeiraAresta(); aresta != nullptr ; aresta = aresta->getProx())
+            for (Aresta *aresta = no->getPrimeiraAresta(); aresta != nullptr; aresta = aresta->getProx())
             {
-                if(this->auxBuscaVetor(vertices, tamanho, aresta->getTargetId()))
+                if (this->auxBuscaVetor(vertices, tamanho, aresta->getTargetId()))
                 {
                     subgrafo->adicionarAresta(aresta->getOriginId(), aresta->getTargetId(), aresta->getPesoAresta());
                 }
             }
-            
         }
     }
-    
+
     return subgrafo;
-    
 }
 
-bool Grafo::existeNoPorIdAux(int id_aux) {
+bool Grafo::existeNoPorIdAux(int id_aux)
+{
     // Veririca se tem No nesse grafo
-    if(this->primeiroNo != nullptr) {
+    if (this->primeiroNo != nullptr)
+    {
         // Percorre os Nos do grafo
-        for (No* no = this->primeiroNo; no != nullptr ; no = no->getProxNo()) {
+        for (No *no = this->primeiroNo; no != nullptr; no = no->getProxNo())
+        {
             // Se encontrar o No pelo Id Aux, retorna verdadeiro
-            if(no->getId() == id_aux) {
+            if (no->getId() == id_aux)
+            {
                 return true;
             }
         }
@@ -826,11 +833,14 @@ bool Grafo::existeNoPorIdAux(int id_aux) {
     return false;
 }
 
-bool Grafo::auxBuscaVetor(int vertices[], int tamanho, int id_aux) {
+bool Grafo::auxBuscaVetor(int vertices[], int tamanho, int id_aux)
+{
     // Percorre o vetor
-    for(int i = 0; i < tamanho; i++) {
+    for (int i = 0; i < tamanho; i++)
+    {
         // Se encontrar, retorna true
-        if(vertices[i] == id_aux) {
+        if (vertices[i] == id_aux)
+        {
             return true;
         }
     }
@@ -844,7 +854,7 @@ float Grafo::agrupamentoLocal(int id)
 
     No *no = this->procurarNo(id);
 
-    if(no == nullptr)
+    if (no == nullptr)
     {
         cout << "Id inválido para achar seu agrupamento local!" << endl;
         return -1;
@@ -873,49 +883,41 @@ float Grafo::agrupamentoLocal(int id)
             size = adjacente.size();
             for (int j = 0; j < size; j++)
             {
-                if(aresta->getOriginId() == adjacente[j])
+                if (aresta->getOriginId() == adjacente[j])
                     par++;
             }
-            
         }
-        
     }
 
     int arestasCompletas = (grau * (grau - 1)) / 2;
 
-    if(!this->direcionado)
+    if (!this->direcionado)
         par = par / 2;
     else
         arestasCompletas = arestasCompletas / 2;
-    
- 
+
     coeficiente = par / arestasCompletas;
 
-    if(par == 0 || arestasCompletas == 0)
+    if (par == 0 || arestasCompletas == 0)
         coeficiente = 0;
 
-    cout << "O coeficiente de agrupamento local do vertice " << id << " é: " << coeficiente << endl;
     return coeficiente;
-    
-    
 }
 
 void Grafo::agrupamentoMedio()
 {
     float somaDosAgrupamentos = 0;
     float coeficiente;
-    
-    No *no = this->primeiroNo;
 
-    while (no != nullptr)
+    No *noAgrpMedio = this->primeiroNo;
+    while (noAgrpMedio != nullptr)
     {
-        somaDosAgrupamentos += this->agrupamentoLocal(no->getId());
+        somaDosAgrupamentos += this->agrupamentoLocal(noAgrpMedio->getId());
 
-        no = no->getProxNo();
+        noAgrpMedio = noAgrpMedio->getProxNo();
     }
 
     coeficiente = somaDosAgrupamentos / this->ordem;
 
     cout << "Coeficiente de agrupamento medio do Grafo: " << coeficiente << endl;
-    
 }

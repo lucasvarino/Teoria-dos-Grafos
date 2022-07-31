@@ -27,21 +27,21 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
     if (grafo->getPonderadoArestas())
         while (arquivo >> idNo >> destinoNo >> pesoAresta)
         {
-            grafo->inserirNo(idNo, 0); // 0 por enquanto
+           // grafo->inserirNo(idNo, 0); // 0 por enquanto
             grafo->adicionarAresta(idNo, destinoNo, pesoAresta);
         }
     else if (!grafo->getPonderadoArestas()) // leitura -> sem peso nas arestas
         while (arquivo >> idNo >> destinoNo)
         {
-            grafo->inserirNo(idNo, 0);                  // 0 por enquanto
+            // grafo->inserirNo(idNo, 0);                  // 0 por enquanto
             grafo->adicionarAresta(idNo, destinoNo, 0); // peso 0 para todas // se descomentar isso nao roda o codigo
         }
 
     cout << "Grafo de ordem " << ordem << " ultimo no: " << grafo->getUltimoNo()->getId() << " ordem: " << grafo->getOrdem() << endl;
-    cout << "Total de Arestas: " << grafo->getTotalArestas();
+    cout << "Total de Arestas: " << grafo->getTotalArestas() << endl;
 
-    //Precisamos disso para rodar a AGM por PRIM
-    
+    // Precisamos disso para rodar a AGM por PRIM
+
     // string retorno;
 
     // cout<<"Digite a ordem do subgrafo de entrada: ";
@@ -61,38 +61,40 @@ Grafo *lerArquivo(ifstream &arquivo, int isDirecionado, int temPesoAresta, int t
 void menu(Grafo *grafo, string arquivoSaida)
 {
     int escolha;
-    cout<<"MENU:"<<endl;
-    cout<<"[1] Fecho transitivo direto"<<endl;
-    cout<<"[2] Fecho transitivo indireto"<<endl;
-    cout<<"[3] Agrupamento Local"<<endl;
-    cout<<"[4] Agrupamento Medio"<<endl;
+    cout << "MENU:" << endl;
+    cout << "[1] Fecho transitivo direto" << endl;
+    cout << "[2] Fecho transitivo indireto" << endl;
+    cout << "[3] Agrupamento Local" << endl;
+    cout << "[4] Agrupamento Medio" << endl;
 
-    cout<<"[0] Sair"<<endl;
+    cout << "[0] Sair" << endl;
 
-    cout<<"Digite o valor desejado: ";
-    cin>>escolha;
+    cout << "Digite o valor desejado: ";
+    cin >> escolha;
     switch (escolha)
     {
     case 0:
-        cout<<"Au revoir!"<<endl;
+        cout << "Au revoir!" << endl;
         exit(0);
         break;
     case 1:
-        cout<<"Escolha o ID para o fecho transitivo direto: ";
-        cin>>escolha;
+        cout << "Escolha o ID para o fecho transitivo direto: ";
+        cin >> escolha;
         grafo->fechoTransitivoDireto(escolha);
         menu(grafo, "oi");
         break;
     case 2:
-        cout<<"Escolha o ID para o fecho transitivo indireto: ";
-        cin>>escolha;
+        cout << "Escolha o ID para o fecho transitivo indireto: ";
+        cin >> escolha;
         grafo->fechoTransitivoIndireto(escolha);
         menu(grafo, "oi");
         break;
     case 3:
         cout << "Escolha o ID para achar seu agrupamento local: ";
         cin >> escolha;
-        grafo->agrupamentoLocal(escolha);
+        float coeficiente;
+        coeficiente = grafo->agrupamentoLocal(escolha);
+        cout << "O coeficiente de agrupamento local do vertice " << escolha << " é: " << coeficiente << endl;
         menu(grafo, "oi");
         break;
     case 4:
@@ -100,11 +102,10 @@ void menu(Grafo *grafo, string arquivoSaida)
         grafo->agrupamentoMedio();
         menu(grafo, "oi");
         break;
-    
+
     default:
         break;
     }
-    
 }
 
 int main(int argc, char const *argv[])
@@ -113,7 +114,7 @@ int main(int argc, char const *argv[])
     std::ifstream arquivo;
     string arquivoEntrada = argv[1];
     string arquivoSaida = argv[2];
-    
+
     Grafo *grafo;
     if (argc != 6)
         cout << "ERRO-> Todos os parametros sao necessários!";
